@@ -30,8 +30,12 @@ public class BeansGestionJefeArea implements Serializable {
     public String irGestionJefesArea() throws SQLException {
         System.out.println("GestionJefesArea");
         jefesAreas =  servicioGestionJefeArea.listarTodo();
+        System.out.println("Hola gerson ");
+
         return "gestionpersonal/JefesArea";
     }
+
+
 
 
 
