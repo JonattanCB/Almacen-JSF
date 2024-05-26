@@ -30,7 +30,7 @@ public class BeansGestionJefeArea implements Serializable {
     public String irGestionJefesArea() throws SQLException {
         System.out.println("GestionJefesArea");
         jefesAreas =  servicioGestionJefeArea.listarTodo();
-        System.out.println("Hola eduardo +345");
+        System.out.println("Hola eduardo +3453");
 
         return "gestionpersonal/JefesArea";
     }
