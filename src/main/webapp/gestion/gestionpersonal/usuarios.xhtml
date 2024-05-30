@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Gestion Usuario</title>
+    <h:outputStylesheet  library="primefaces-saga" name="theme.css" />
+    <h:outputStylesheet library="css" name="SylerTodo.css"/>
+    <h:outputStylesheet library="css" name="StylerPanels.css"/>
+</h:head>
+<h:body styleClass="contendor-panel" >
+    <h:form  id="form">
+        <p:growl id="messages" showDetail="true" />
+        <p:panel styleClass="card-informacion">
+            <f:facet name="header">
+                <i class="pi pi-sitemap"/> <p:outputLabel value="Listado de Usuario" styleClass="titulo-card" />
+            </f:facet>
+            <p:toolbar>
+                <p:toolbarGroup >
+                    <p:commandButton value="Nuevo Usuario" icon="pi pi-plus" actionListener="#{beansGestionUsuario.abrirNuevoUsuario}"
+                                     update=":dialogs:userdialog-content" oncomplete="PF('userdialog').show()"
+                                     styleClass="ui-button-success" style="margin-right: .5rem">
+                        <p:resetInput target=":dialogs:userdialog-content" />
+                    </p:commandButton>
+                </p:toolbarGroup>
+
+            </p:toolbar>
+            <p:dataTable id="dt-user" var="user" value="#{beansGestionUsuario.lstTabla}" widgetVar="user"
+                         emptyMessage="No hay tipo de documentos Registrados"
+                         filteredValue="#{beansGestionUsuario.lstTablaSeleccionada}"
+                         globalFilterFunction="#{beansGestionUsuario.globalFilterFunction}"
+                         rows="10" paginator="true" rowSelectMode="add" paginatorPosition="bottom">
+
+                <f:facet name="header">
+                    <div class="buscador-table">
+                        <span class="titulo-tabla">Usuarios</span>
+                        <span class="filter-container ui-input-icon-left" style="float: right">
+                            <i class="pi pi-search"/>
+                            <p:inputText id="globalFilter" onkeyup="PF('user').filter()"
+                                         placeholder="Buscar todo los campos" />
+                        </span>
+                    </div>
+                </f:facet>
+
+                <p:column headerText="#"  >
+                    <h:outputText value="#{user.id}" />
+                </p:column>
+                <p:column headerText="Nombre Completo" >
+                    <h:outputText value="#{user.personas.pnombre} #{user.personas.snombre} #{user.personas.apatero} #{user.personas.amatero}" />
+                </p:column>
+                <p:column headerText="Correo" >
+                    <h:outputText value="#{user.correo}" />
+                </p:column>
+                <p:column headerText="Tipo de  Documento" >
+                    <h:outputText value="#{user.personas.tipoDocumento.nombre}" />
+                </p:column>
+                <p:column headerText="Numero de  Documento" >
+                    <h:outputText value="#{user.personas.ndocumento}" />
+                </p:column>
+                <p:column headerText="Acciones">
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+
+    <h:form id="dialogs">
+        <p:dialog header="Detalles del Usuario" showEffect="fade" modal="true" widgetVar="userdialog" width="800" height="400" responsive="true" styleClass="dialogs-barra">
+            <p:outputPanel id="userdialog-content" styleClass="ui-fluid" >
+                <p:accordionPanel multiple="true">
+                    <p:tab title="Datos Personal">
+                        <h:panelGrid columns="2" style="width: 100%">
+                            <h:panelGrid>
+                                <div class="field col">
+                                    <p:outputLabel for="pnombre" value="Primer Nombre" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.pnombre}"  id="pnombre" required="true" />
+                                </div>
+                            </h:panelGrid>
+                            <h:panelGrid>
+                                <div class="field col">
+                                    <p:outputLabel for="snombre" value="Segundo Nombre" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.snombre}"  id="snombre" required="true" />
+                                </div>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="width: 100%">
+                            <h:panelGrid>
+                                <div class="field col" style="width: 100%">
+                                    <p:outputLabel for="apaterno" value="Apellido Paterno" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.apatero}"   id="apaterno" required="true" />
+                                </div>
+                            </h:panelGrid>
+                            <h:panelGrid>
+                                <div class="field col"  style="width: 100%">
+                                    <p:outputLabel for="amaterno" value="Apellido Materno" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.amatero}"  id="amaterno" required="true" />
+                                </div>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="width: 100%">
+                            <h:panelGrid>
+                                <div class="field">
+                                    <p:outputLabel  for="tdocumento"  value="Id tipo documento" />
+                                    <br/>
+                                    <p:inputText id="tdocumento" value="#{beansGestionUsuario.persona.tipoDocumento.id}"  required="true"/>
+                                </div>
+                            </h:panelGrid>
+                            <h:panelGrid>
+                                <div class="field col"  style="width: 100%">
+                                    <p:outputLabel for="ndocumento" value="Numero de Documento" />
+                                    <p:inputNumber  value="#{beansGestionUsuario.persona.ndocumento}"  id="ndocumento" required="true" />
+                                </div>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <div class="field">
+                            <p:outputLabel  for="direccion"  value="Direccion" />
+                            <br/>
+                            <p:inputText id="direccion" value="#{beansGestionUsuario.persona.direccion}"  required="true"/>
+                        </div>
+                        <div class="field">
+                            <p:outputLabel  for="telefono"  value="telefono" />
+                            <br/>
+                            <p:inputText id="telefono" value="#{beansGestionUsuario.persona.telefono}"  required="true"/>
+                        </div>
+                    </p:tab>
+
+                </p:accordionPanel>
+            </p:outputPanel>
+            <f:facet name="footer">
+                <p:commandButton value="Guardar"  icon="pi pi-check" action="#{beansGestionUsuario.guardarUsuario()}" update="userdialog-content" process="userdialog-content @this" />
+                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('userdialog').hide()"  styleClass="ui-button-secondary" type="button"/>
+            </f:facet>
+        </p:dialog>
+        <p:confirmDialog widgetVar="delete-td" showEffect="fade" width="300" message="Deseas dar de baja este Tipo de documento?" header="Confirmacion"
+                         severity="warn">
+            <p:commandButton value="Yes" icon="pi pi-check"
+                             process="@this" update=":form"
+                             oncomplete="PF('delete-td').hide()" />
+            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                             onclick="PF('delete-td').hide()" />
+        </p:confirmDialog>
+    </h:form>
+</h:body>
+</html>

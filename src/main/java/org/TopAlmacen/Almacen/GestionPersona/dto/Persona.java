@@ -1,21 +1,35 @@
-package org.TopAlmacen.Almacen.GestionPersonal.dto;
+package org.TopAlmacen.Almacen.GestionPersona.dto;
 
 import org.TopAlmacen.Almacen.GestionTipoDocumento.dto.TipoDocumento;
 
-public class Personas {
+public class Persona {
 
     private int id;
     private String pnombre;
     private String snombre;
-    private String apaterno;
-    private String amaterno;
+    private String apatero;
+    private String amatero;
     private TipoDocumento tipoDocumento;
-    private int n_documento;
+    private int ndocumento;
     private String direccion;
     private int telefono;
-    private String  estado;
+    private String estado;
 
-    public Personas() {}
+    public Persona() {
+    }
+
+    public Persona(int id, String pnombre, String snombre, String apatero, String amatero, TipoDocumento tipoDocumento, int ndocumento, String direccion, int telefono, String estado) {
+        this.id = id;
+        this.pnombre = pnombre;
+        this.snombre = snombre;
+        this.apatero = apatero;
+        this.amatero = amatero;
+        this.tipoDocumento = tipoDocumento;
+        this.ndocumento = ndocumento;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.estado = estado;
+    }
 
     public int getId() {
         return id;
@@ -41,20 +55,20 @@ public class Personas {
         this.snombre = snombre;
     }
 
-    public String getApaterno() {
-        return apaterno;
+    public String getApatero() {
+        return apatero;
     }
 
-    public void setApaterno(String apaterno) {
-        this.apaterno = apaterno;
+    public void setApatero(String apatero) {
+        this.apatero = apatero;
     }
 
-    public String getAmaterno() {
-        return amaterno;
+    public String getAmatero() {
+        return amatero;
     }
 
-    public void setAmaterno(String amaterno) {
-        this.amaterno = amaterno;
+    public void setAmatero(String amatero) {
+        this.amatero = amatero;
     }
 
     public TipoDocumento getTipoDocumento() {
@@ -65,12 +79,12 @@ public class Personas {
         this.tipoDocumento = tipoDocumento;
     }
 
-    public int getN_documento() {
-        return n_documento;
+    public int getNdocumento() {
+        return ndocumento;
     }
 
-    public void setN_documento(int n_documento) {
-        this.n_documento = n_documento;
+    public void setNdocumento(int ndocumento) {
+        this.ndocumento = ndocumento;
     }
 
     public String getDireccion() {

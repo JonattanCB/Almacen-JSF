@@ -64,3 +64,16 @@
     border: 3px solid rgb(241,241,241);
 }
 
+.dialogs-barra::-webkit-scrollbar {
+    width: 9px;
+}
+
+.dialogs-barra::-webkit-scrollbar-track {
+    background: rgb(241,241,241);
+}
+
+.dialogs-barra::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1;
+    border-radius: 20px;
+    border: 3px solid rgb(241,241,241);
+}

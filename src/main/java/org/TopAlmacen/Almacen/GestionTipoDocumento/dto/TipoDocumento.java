@@ -61,4 +61,5 @@ public class TipoDocumento {
     public void setCfecha(Timestamp cfecha) {
         Cfecha = cfecha;
     }
+
 }
