@@ -1,7 +1,7 @@
 package org.TopAlmacen.Almacen.GestionTipoUnidad.servicio;
 
+import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
-import jakarta.enterprise.context.SessionScoped;
 import org.TopAlmacen.Almacen.GestionTipoUnidad.dao.Impl.ImplGestionTipoUnidad;
 import org.TopAlmacen.Almacen.GestionTipoUnidad.dao.daoGestionTipoUnidad;
 import org.TopAlmacen.Almacen.GestionTipoUnidad.dto.TipoUnidad;
@@ -11,8 +11,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Stateless
-@SessionScoped
+@LocalBean
 public class servicioGestionTipoUnidad implements Serializable {
+
     private final daoGestionTipoUnidad dao = new ImplGestionTipoUnidad();
 
     public List<TipoUnidad> lstTipoUnidad() throws SQLException {

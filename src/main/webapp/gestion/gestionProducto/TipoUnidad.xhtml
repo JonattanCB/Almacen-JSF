@@ -6,7 +6,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
-<title>Roles</title>
+<title>Tipo Unidad</title>
 <h:outputStylesheet  library="primefaces-saga" name="theme.css" />
 <h:outputStylesheet library="css" name="SylerTodo.css"/>
 <h:outputStylesheet library="css" name="StylerPanels.css"/>
@@ -16,11 +16,11 @@
     <p:growl id="messages" showDetail="true" />
     <p:panel styleClass="card-informacion">
         <f:facet name="header">
-            <i class="pi pi-sitemap"/> <p:outputLabel value="Listado de Categorias" styleClass="titulo-card" />
+            <i class="pi pi-sitemap"/> <p:outputLabel value="Listado de Tipo de Unidad" styleClass="titulo-card" />
         </f:facet>
         <p:toolbar>
             <p:toolbarGroup >
-                <p:commandButton value="Nuevo Categoria" icon="pi pi-plus" actionListener="#{beansGestionCategoria.nuevaCategoria()}"
+                <p:commandButton value="Nuevo Tipo de Unidad" icon="pi pi-plus" actionListener="#{beansGestionTipoUnidad.nuevaTipoUnidad()}"
                                  update=":dialogs:dialog-content" oncomplete="PF('dialog').show()"
                                  styleClass="ui-button-success" style="margin-right: .5rem">
                     <p:resetInput target=":dialogs:dialog-content" />
@@ -28,40 +28,40 @@
             </p:toolbarGroup>
 
         </p:toolbar>
-        <p:dataTable id="dt" var="categoria" value="#{beansGestionCategoria.lstTabla}"  widgetVar="categoria"
-                     emptyMessage="No hay Categorias Registrados"
-                     filteredValue="#{beansGestionCategoria.lstSeleccionado}"
-                     globalFilterFunction="#{beansGestionCategoria.globalFilterFunction}"
+        <p:dataTable id="dt" var="tu" value="#{beansGestionTipoUnidad.lstTabla}"  widgetVar="tu"
+                     emptyMessage="No hay Tipo de unidad Registrados"
+                     filteredValue="#{beansGestionTipoUnidad.lstSeleccionado}"
+                     globalFilterFunction="#{beansGestionTipoUnidad.globalFilterFunction}"
                      rows="10" paginator="true" rowSelectMode="add" paginatorPosition="bottom">
             <f:facet name="header">
                 <div class="buscador-table">
-                    <span class="titulo-tabla">ROLES</span>
+                    <span class="titulo-tabla">TIPO UNIDAD</span>
                     <span class="filter-container ui-input-icon-left" style="float: right">
                             <i class="pi pi-search"/>
-                            <p:inputText id="globalFilter" onkeyup="PF('categoria').filter()"
+                            <p:inputText id="globalFilter" onkeyup="PF('tu').filter()"
                                          placeholder="Buscar todo los campos" />
                         </span>
                 </div>
             </f:facet>
             <p:column headerText="#"  >
-                <h:outputText value="#{categoria.id}" />
+                <h:outputText value="#{tu.id}" />
             </p:column>
             <p:column headerText="Nombre" >
-                <h:outputText value="#{categoria.nombre}" />
+                <h:outputText value="#{tu.nombre}" />
             </p:column>
-            <p:column headerText="Descripcion" >
-                <h:outputText value="#{categoria.descripcion}" />
+            <p:column headerText="Abreviatura" >
+                <h:outputText value="#{tu.abrev}" />
             </p:column>
             <p:column headerText="Acciones">
                 <p:commandButton icon="pi pi-pencil" update=":dialogs:dialog-content"
-                                 oncomplete="PF('dialog').show()" action="#{beansGestionCategoria.editarCategoria()}"
+                                 oncomplete="PF('dialog').show()" action="#{beansGestionTipoUnidad.ireditar()}"
                                  styleClass="edit-button rounded-button ui-button-success" process="@this">
-                    <f:setPropertyActionListener value="#{categoria.id}" target="#{beansGestionCategoria.id_seleccionada}" />
+                    <f:setPropertyActionListener value="#{tu.id}" target="#{beansGestionTipoUnidad.id_seleccionada}" />
                 </p:commandButton> |
                 <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
                                  process="@this"
                                  oncomplete="PF('deleterol').show()" >
-                    <f:setPropertyActionListener value="#{categoria.id}" target="#{beansGestionCategoria.id_seleccionada}" />
+                    <f:setPropertyActionListener value="#{tu.id}" target="#{beansGestionTipoUnidad.id_seleccionada}" />
                 </p:commandButton>
             </p:column>
         </p:dataTable>
@@ -73,15 +73,15 @@
             <div class="field">
                 <p:outputLabel  for="nombre"  value="Nombre" />
                 <br/>
-                <p:inputText id="nombre" value="#{beansGestionCategoria.categoria.nombre}"  required="true"/>
+                <p:inputText id="nombre" value="#{beansGestionTipoUnidad.tipoUnidad.nombre}"  required="true"/>
             </div><br/>
             <div class="field">
-                <p:outputLabel for="descripcion" value="Descripcion" />
-                <br/><p:inputTextarea id="descripcion" value="#{beansGestionCategoria.categoria.descripcion}"   required="true" />
+                <p:outputLabel for="abrev" value="Abreviatura" />
+                <br/><p:inputText id="abrev" value="#{beansGestionTipoUnidad.tipoUnidad.abrev}"   required="true" />
             </div>
         </p:outputPanel>
         <f:facet name="footer">
-            <p:commandButton value="Guardar"  icon="pi pi-check" action="#{beansGestionCategoria.guardar()}" update="dialog-content" process="dialog-content @this" />
+            <p:commandButton value="Guardar"  icon="pi pi-check" action="#{beansGestionTipoUnidad.guardar()}" update="dialog-content" process="dialog-content @this" />
             <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialog').hide()"  styleClass="ui-button-secondary" type="button"/>
         </f:facet>
     </p:dialog>
@@ -95,4 +95,4 @@
     </p:confirmDialog>
 </h:form>
 </h:body>
-        </html>
+</html>
