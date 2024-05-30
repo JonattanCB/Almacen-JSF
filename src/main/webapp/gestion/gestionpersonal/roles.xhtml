@@ -34,16 +34,17 @@
                          globalFilterFunction="#{beansGestionRol.globalFilterFunction}"
                          rows="10" paginator="true" rowSelectMode="add" paginatorPosition="bottom">
                 <f:facet name="header">
-                    <h:panelGrid columns="2">
-                        <h:panelGrid>
-                            <p:outputLabel value="Roles"   />
-                        </h:panelGrid>
-                        <h:panelGrid style="text-align: right">
-                                <p:inputText id="globalFilter" onkeyup="PF('rol').filter()"
-                                       placeholder="Buscar todo los campos" />
-                        </h:panelGrid>
-                    </h:panelGrid>
+                    <div class="buscador-table">
+                        <span class="titulo-tabla">ROLES</span>
+                        <span class="filter-container ui-input-icon-left" style="float: right">
+                            <i class="pi pi-search"></i>
+                            <p:inputText id="globalFilter" onkeyup="PF('rol').filter()"
+                                         placeholder="Buscar todo los campos" />
+                        </span>
+                    </div>
                 </f:facet>
+
+
 
                 <p:column headerText="#"  >
                     <h:outputText value="#{rol.id}" />
@@ -59,7 +60,7 @@
                                      oncomplete="PF('roldialog').show()" action="#{beansGestionRol.abrirRol}"
                                      styleClass="edit-button rounded-button ui-button-success" process="@this">
                         <f:setPropertyActionListener value="#{rol.id}" target="#{beansGestionRol.idSeleccionada}" />
-                    </p:commandButton>
+                    </p:commandButton> |
                     <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
                                      process="@this"
                                      oncomplete="PF('deleterol').show()" >

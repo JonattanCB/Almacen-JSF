@@ -27,11 +27,10 @@
     height: 70px;
     position:relative;
     float:right;
-    padding: 0px 2px;
+    padding: 0 2px;
     background-color:  rgb(34, 45, 48);
     border: none;
     margin: 0;
-    padding: 0;
 }
 
 .titulo-banner{
