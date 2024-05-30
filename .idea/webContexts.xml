@@ -4,6 +4,7 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/gestion/dasboard.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/gestion" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/gestion/gestionProducto/categoria.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/gestion/gestionProducto" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/gestion/gestionpersonal/JefesArea.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/gestion/gestionpersonal" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/gestion/gestionpersonal/roles.xhtml" value="file://$PROJECT_DIR$/src/main/webapp/gestion/gestionpersonal" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/index.xhtml" value="file://$PROJECT_DIR$/src/main/webapp" />
