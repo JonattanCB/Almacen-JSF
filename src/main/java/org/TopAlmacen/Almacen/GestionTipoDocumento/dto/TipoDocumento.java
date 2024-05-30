@@ -1,16 +1,25 @@
 package org.TopAlmacen.Almacen.GestionTipoDocumento.dto;
 
+import java.sql.Timestamp;
+
 public class TipoDocumento {
     private int id;
     private String nombre;
+
     private String descripcion;
+
+    private String estado;
+
+    private Timestamp Cfecha;
 
     public TipoDocumento() {}
 
-    public TipoDocumento(int id, String nombre, String descripcion) {
+    public TipoDocumento(int id, String nombre, String descripcion, String estado, Timestamp cfecha) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.estado = estado;
+        Cfecha = cfecha;
     }
 
     public int getId() {
@@ -37,5 +46,19 @@ public class TipoDocumento {
         this.descripcion = descripcion;
     }
 
+    public String getEstado() {
+        return estado;
+    }
 
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Timestamp getCfecha() {
+        return Cfecha;
+    }
+
+    public void setCfecha(Timestamp cfecha) {
+        Cfecha = cfecha;
+    }
 }

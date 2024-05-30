@@ -12,21 +12,52 @@ import java.util.List;
 
 public class ImplGestionTipoDocumento implements daoGestionTipoDocumento {
 
-    private conexion con;
+    private final conexion con = new conexion();
 
     @Override
     public void registrar(TipoDocumento tipoDocumento) throws SQLException {
-
+        try {
+            PreparedStatement ps = con.crearCNX().prepareStatement("INSERT INTO public.tipodocumento(\n" +
+                    "\tnombre, descripcion, estado, \"CFecha\")\n" +
+                    "\tVALUES ( ?, ?, ?, ?);");
+            ps.setString(1, tipoDocumento.getNombre());
+            ps.setString(2, tipoDocumento.getDescripcion());
+            ps.setString(3, tipoDocumento.getEstado());
+            ps.setTimestamp(4,tipoDocumento.getCfecha());
+            ps.execute();
+        }catch (Exception e) {
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
     }
 
     @Override
     public void actualizar(TipoDocumento tipoDocumento) throws SQLException {
-
+        try {
+            PreparedStatement ps = con.crearCNX().prepareStatement("UPDATE public.tipodocumento\n" +
+                    "\tSET  nombre=?, descripcion=?\n" +
+                    "\tWHERE id =?;");
+            ps.setString(1, tipoDocumento.getNombre());
+            ps.setString(2, tipoDocumento.getDescripcion());
+            ps.setInt(3, tipoDocumento.getId());
+            ps.execute();
+        }catch (Exception e) {
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
     }
 
     @Override
     public void eliminar(TipoDocumento tipoDocumento) throws SQLException {
+        try {
 
+        }catch (Exception e) {
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
     }
 
     @Override
@@ -52,23 +83,25 @@ public class ImplGestionTipoDocumento implements daoGestionTipoDocumento {
 
     @Override
     public List<TipoDocumento> buscarTodos() throws SQLException {
-        List<TipoDocumento> tipoDocumentos = new ArrayList<TipoDocumento>();
+        List<TipoDocumento> lst = new ArrayList<>();
         try {
             PreparedStatement ps = con.crearCNX().prepareStatement("SELECT * FROM public.tipodocumento\n" +
                     "ORDER BY id ASC ");
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                TipoDocumento tipoDocumento = new TipoDocumento();
-                tipoDocumento.setId(rs.getInt(1));
-                tipoDocumento.setNombre(rs.getString(2));
-                tipoDocumento.setDescripcion(rs.getString(3));
-                tipoDocumentos.add(tipoDocumento);
+            while (rs.next()){
+                TipoDocumento td = new TipoDocumento();
+                td.setId(rs.getInt(1));
+                td.setNombre(rs.getString(2));
+                td.setDescripcion(rs.getString(3));
+                td.setEstado(rs.getString(4));
+                td.setCfecha(rs.getTimestamp(5));
+                lst.add(td);
             }
-        }catch (Exception e){
+        }catch (SQLException e){
             System.err.println(e.getMessage());
         }finally {
             con.cerrar();
         }
-        return tipoDocumentos;
+        return  lst;
     }
 }

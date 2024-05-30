@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ImplGestionRol implements daoGestionRol {
 
-    conexion conn = new conexion();
+    private final conexion conn = new conexion();
 
     @Override
     public void registrar(Rol rol) throws SQLException {

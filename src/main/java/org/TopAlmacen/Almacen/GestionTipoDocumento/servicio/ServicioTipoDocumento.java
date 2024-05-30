@@ -13,9 +13,23 @@ import java.util.List;
 @Stateless
 @LocalBean
 public class ServicioTipoDocumento implements Serializable {
-    private daoGestionTipoDocumento dao=new ImplGestionTipoDocumento();
+
+    private final daoGestionTipoDocumento dao =new ImplGestionTipoDocumento();
 
     public List<TipoDocumento> listaTipoDocumento() throws SQLException {
-        return  dao.buscarTodos();
+        List<TipoDocumento> lst = dao.buscarTodos();
+        return  lst;
+    }
+
+    public void guardarTipoDocumento(TipoDocumento td) throws  SQLException {
+        dao.registrar(td);
+    }
+
+    public TipoDocumento buscarTipoDocumento(int id) throws SQLException {
+        return dao.buscar(id);
+    }
+
+    public void ActualizarTipoDocumento(TipoDocumento td) throws  SQLException{
+        dao.actualizar(td);
     }
 }
