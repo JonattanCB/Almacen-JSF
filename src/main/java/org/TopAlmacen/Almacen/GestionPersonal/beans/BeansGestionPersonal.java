@@ -3,7 +3,6 @@ package org.TopAlmacen.Almacen.GestionPersonal.beans;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.TopAlmacen.Almacen.GestionJefesArea.dto.JefesArea;
 import org.TopAlmacen.Almacen.GestionPersonal.dto.Personas;
 import org.TopAlmacen.Almacen.GestionPersonal.servicio.ServicioGestionPersonas;
 import org.primefaces.util.LangUtils;
