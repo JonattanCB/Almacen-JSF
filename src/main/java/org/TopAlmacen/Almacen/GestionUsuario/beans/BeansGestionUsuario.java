@@ -3,6 +3,8 @@ package org.TopAlmacen.Almacen.GestionUsuario.beans;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import lombok.Getter;
+import lombok.Setter;
 import org.TopAlmacen.Almacen.GestionPersona.dto.Persona;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.dto.TipoDocumento;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.servicio.ServicioTipoDocumento;
@@ -17,6 +19,8 @@ import java.util.Locale;
 
 @Named
 @SessionScoped
+@Getter
+@Setter
 public class BeansGestionUsuario implements Serializable {
 
     @Inject
@@ -29,7 +33,6 @@ public class BeansGestionUsuario implements Serializable {
     private List<Usuario> lstTablaSeleccionada;
     private Usuario usuario;
     private List<TipoDocumento> lstTipoDocumento;
-    private TipoDocumento tipoDocumento;
     private TipoDocumento selectedTipoDocumento;
     private Persona persona;
 
@@ -46,7 +49,7 @@ public class BeansGestionUsuario implements Serializable {
 
     public void abrirNuevoUsuario() throws SQLException {
         lstTipoDocumento = servicioTipoDocumento.listaTipoDocumento();
-        this.tipoDocumento = new TipoDocumento();
+        this.selectedTipoDocumento = new TipoDocumento();
         this.persona = new Persona();
         this.usuario = new Usuario();
     }
@@ -73,67 +76,5 @@ public class BeansGestionUsuario implements Serializable {
         catch (NumberFormatException ex) {
             return 0;
         }
-    }
-
-
-
-
-
-
-
-    public List<Usuario> getLstTabla() {
-        return lstTabla;
-    }
-
-    public void setLstTabla(List<Usuario> lstTabla) {
-        this.lstTabla = lstTabla;
-    }
-
-    public List<Usuario> getLstTablaSeleccionada() {
-        return lstTablaSeleccionada;
-    }
-
-    public void setLstTablaSeleccionada(List<Usuario> lstTablaSeleccionada) {
-        this.lstTablaSeleccionada = lstTablaSeleccionada;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public List<TipoDocumento> getLstTipoDocumento() {
-        return lstTipoDocumento;
-    }
-
-    public void setLstTipoDocumento(List<TipoDocumento> lstTipoDocumento) {
-        this.lstTipoDocumento = lstTipoDocumento;
-    }
-
-    public TipoDocumento getTipoDocumento() {
-        return tipoDocumento;
-    }
-
-    public void setTipoDocumento(TipoDocumento tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
-    }
-
-    public Persona getPersona() {
-        return persona;
-    }
-
-    public void setPersona(Persona persona) {
-        this.persona = persona;
-    }
-
-    public TipoDocumento getSelectedTipoDocumento() {
-        return selectedTipoDocumento;
-    }
-
-    public void setSelectedTipoDocumento(TipoDocumento selectedTipoDocumento) {
-        this.selectedTipoDocumento = selectedTipoDocumento;
     }
 }
