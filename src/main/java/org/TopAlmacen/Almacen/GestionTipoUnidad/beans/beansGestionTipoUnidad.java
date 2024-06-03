@@ -5,20 +5,20 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.TopAlmacen.Almacen.GestionCategoria.dto.Categoria;
-import org.TopAlmacen.Almacen.GestionTipoUnidad.dto.TipoUnidad;
+import lombok.Data;
+import org.TopAlmacen.Almacen.GestionTipoUnidad.model.TipoUnidad;
 import org.TopAlmacen.Almacen.GestionTipoUnidad.servicio.servicioGestionTipoUnidad;
 import org.primefaces.PrimeFaces;
 import org.primefaces.util.LangUtils;
 
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
 
 @Named
 @SessionScoped
+@Data
 public class beansGestionTipoUnidad implements Serializable {
 
     @Inject
@@ -76,43 +76,4 @@ public class beansGestionTipoUnidad implements Serializable {
         }
     }
 
-    public org.TopAlmacen.Almacen.GestionTipoUnidad.servicio.servicioGestionTipoUnidad getServicioGestionTipoUnidad() {
-        return servicioGestionTipoUnidad;
-    }
-
-    public void setServicioGestionTipoUnidad(org.TopAlmacen.Almacen.GestionTipoUnidad.servicio.servicioGestionTipoUnidad servicioGestionTipoUnidad) {
-        this.servicioGestionTipoUnidad = servicioGestionTipoUnidad;
-    }
-
-    public List<TipoUnidad> getLstTabla() {
-        return lstTabla;
-    }
-
-    public void setLstTabla(List<TipoUnidad> lstTabla) {
-        this.lstTabla = lstTabla;
-    }
-
-    public List<TipoUnidad> getLstSeleccionado() {
-        return lstSeleccionado;
-    }
-
-    public void setLstSeleccionado(List<TipoUnidad> lstSeleccionado) {
-        this.lstSeleccionado = lstSeleccionado;
-    }
-
-    public TipoUnidad getTipoUnidad() {
-        return tipoUnidad;
-    }
-
-    public void setTipoUnidad(TipoUnidad tipoUnidad) {
-        this.tipoUnidad = tipoUnidad;
-    }
-
-    public int getId_seleccionada() {
-        return id_seleccionada;
-    }
-
-    public void setId_seleccionada(int id_seleccionada) {
-        this.id_seleccionada = id_seleccionada;
-    }
 }

@@ -1,10 +1,9 @@
 package org.TopAlmacen.Almacen.GestionCategoria.dao.Impl;
 
 import org.TopAlmacen.Almacen.GestionCategoria.dao.daoGestionCategoria;
-import org.TopAlmacen.Almacen.GestionCategoria.dto.Categoria;
+import org.TopAlmacen.Almacen.GestionCategoria.model.Categoria;
 import org.TopAlmacen.Almacen.Utils.conexion;
 
-import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

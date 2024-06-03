@@ -1,13 +1,12 @@
 package org.TopAlmacen.Almacen.GestionTipoDocumento.beans;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.TopAlmacen.Almacen.GestionRol.dto.Rol;
-import org.TopAlmacen.Almacen.GestionTipoDocumento.dto.TipoDocumento;
+import lombok.Data;
+import org.TopAlmacen.Almacen.GestionTipoDocumento.model.TipoDocumento;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.servicio.ServicioTipoDocumento;
 import org.primefaces.PrimeFaces;
 import org.primefaces.util.LangUtils;
@@ -20,6 +19,7 @@ import java.util.Locale;
 
 @Named
 @SessionScoped
+@Data
 public class BeansGestionTipoDocumento implements Serializable {
 
     @Inject
@@ -79,42 +79,5 @@ public class BeansGestionTipoDocumento implements Serializable {
         catch (NumberFormatException ex) {
             return 0;
         }
-    }
-
-
-    
-    
-    
-
-    public TipoDocumento getTipoDocumento() {
-        return tipoDocumento;
-    }
-
-    public void setTipoDocumento(TipoDocumento tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
-    }
-
-    public List<TipoDocumento> getList_tdocumento() {
-        return list_tdocumento;
-    }
-
-    public void setList_tdocumento(List<TipoDocumento> list_tdocumento) {
-        this.list_tdocumento = list_tdocumento;
-    }
-
-    public List<TipoDocumento> getList_tdocumentoSeleccionado() {
-        return list_tdocumentoSeleccionado;
-    }
-
-    public void setList_tdocumentoSeleccionado(List<TipoDocumento> list_tdocumentoSeleccionado) {
-        this.list_tdocumentoSeleccionado = list_tdocumentoSeleccionado;
-    }
-
-    public int getID_TipoDocumento() {
-        return ID_TipoDocumento;
-    }
-
-    public void setID_TipoDocumento(int ID_TipoDocumento) {
-        this.ID_TipoDocumento = ID_TipoDocumento;
     }
 }

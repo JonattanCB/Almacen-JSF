@@ -4,7 +4,7 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import org.TopAlmacen.Almacen.GestionUsuario.dao.Impl.ImplGestionUsuario;
 import org.TopAlmacen.Almacen.GestionUsuario.dao.daoGestionUsuario;
-import org.TopAlmacen.Almacen.GestionUsuario.dto.Usuario;
+import org.TopAlmacen.Almacen.GestionUsuario.model.Usuario;
 
 import java.io.Serializable;
 import java.sql.SQLException;

@@ -4,7 +4,7 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.dao.Impl.ImplGestionTipoDocumento;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.dao.daoGestionTipoDocumento;
-import org.TopAlmacen.Almacen.GestionTipoDocumento.dto.TipoDocumento;
+import org.TopAlmacen.Almacen.GestionTipoDocumento.model.TipoDocumento;
 
 import java.io.Serializable;
 import java.sql.SQLException;

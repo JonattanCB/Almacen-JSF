@@ -1,7 +1,7 @@
 package org.TopAlmacen.Almacen.GestionTipoUnidad.dao.Impl;
 
 import org.TopAlmacen.Almacen.GestionTipoUnidad.dao.daoGestionTipoUnidad;
-import org.TopAlmacen.Almacen.GestionTipoUnidad.dto.TipoUnidad;
+import org.TopAlmacen.Almacen.GestionTipoUnidad.model.TipoUnidad;
 import org.TopAlmacen.Almacen.Utils.conexion;
 
 import java.sql.PreparedStatement;

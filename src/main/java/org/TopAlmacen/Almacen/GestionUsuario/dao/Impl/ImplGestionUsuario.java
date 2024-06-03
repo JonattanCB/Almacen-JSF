@@ -4,10 +4,8 @@ import org.TopAlmacen.Almacen.GestionPersona.dao.Impl.ImplGestionPersona;
 import org.TopAlmacen.Almacen.GestionPersona.dao.daoGestionPersona;
 import org.TopAlmacen.Almacen.GestionRol.dao.daoGestionRol;
 import org.TopAlmacen.Almacen.GestionRol.dao.impl.ImplGestionRol;
-import org.TopAlmacen.Almacen.GestionTipoDocumento.dao.Impl.ImplGestionTipoDocumento;
-import org.TopAlmacen.Almacen.GestionTipoDocumento.dao.daoGestionTipoDocumento;
 import org.TopAlmacen.Almacen.GestionUsuario.dao.daoGestionUsuario;
-import org.TopAlmacen.Almacen.GestionUsuario.dto.Usuario;
+import org.TopAlmacen.Almacen.GestionUsuario.model.Usuario;
 import org.TopAlmacen.Almacen.Utils.conexion;
 
 import java.sql.PreparedStatement;

@@ -1,10 +1,9 @@
 package org.TopAlmacen.Almacen.GestionPersona.dao.Impl;
 
 import org.TopAlmacen.Almacen.GestionPersona.dao.daoGestionPersona;
-import org.TopAlmacen.Almacen.GestionPersona.dto.Persona;
+import org.TopAlmacen.Almacen.GestionPersona.model.Persona;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.dao.Impl.ImplGestionTipoDocumento;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.dao.daoGestionTipoDocumento;
-import org.TopAlmacen.Almacen.GestionUsuario.dto.Usuario;
 import org.TopAlmacen.Almacen.Utils.conexion;
 
 import java.sql.PreparedStatement;

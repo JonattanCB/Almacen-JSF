@@ -4,7 +4,7 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import org.TopAlmacen.Almacen.GestionCategoria.dao.Impl.ImplGestionCategoria;
 import org.TopAlmacen.Almacen.GestionCategoria.dao.daoGestionCategoria;
-import org.TopAlmacen.Almacen.GestionCategoria.dto.Categoria;
+import org.TopAlmacen.Almacen.GestionCategoria.model.Categoria;
 
 import java.io.Serializable;
 import java.sql.SQLException;

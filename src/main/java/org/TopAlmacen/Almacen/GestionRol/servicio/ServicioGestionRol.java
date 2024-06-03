@@ -4,7 +4,7 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import org.TopAlmacen.Almacen.GestionRol.dao.daoGestionRol;
 import org.TopAlmacen.Almacen.GestionRol.dao.impl.ImplGestionRol;
-import org.TopAlmacen.Almacen.GestionRol.dto.Rol;
+import org.TopAlmacen.Almacen.GestionRol.model.Rol;
 
 import java.io.Serializable;
 import java.sql.SQLException;

@@ -1,7 +1,7 @@
 package org.TopAlmacen.Almacen.GestionTipoDocumento.dao.Impl;
 
 import org.TopAlmacen.Almacen.GestionTipoDocumento.dao.daoGestionTipoDocumento;
-import org.TopAlmacen.Almacen.GestionTipoDocumento.dto.TipoDocumento;
+import org.TopAlmacen.Almacen.GestionTipoDocumento.model.TipoDocumento;
 import org.TopAlmacen.Almacen.Utils.conexion;
 
 import java.sql.PreparedStatement;

@@ -1,7 +1,7 @@
 package org.TopAlmacen.Almacen.GestionTipoEmpresa.dao.Impl;
 
 import org.TopAlmacen.Almacen.GestionTipoEmpresa.dao.daoTipoEmpresa;
-import org.TopAlmacen.Almacen.GestionTipoEmpresa.dto.TipoEmpresa;
+import org.TopAlmacen.Almacen.GestionTipoEmpresa.model.TipoEmpresa;
 import org.TopAlmacen.Almacen.Utils.conexion;
 
 import java.sql.PreparedStatement;

@@ -5,9 +5,9 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.TopAlmacen.Almacen.GestionTipoEmpresa.dto.TipoEmpresa;
+import lombok.Data;
+import org.TopAlmacen.Almacen.GestionTipoEmpresa.model.TipoEmpresa;
 import org.TopAlmacen.Almacen.GestionTipoEmpresa.servicio.ServicioGestionTipoEmpresa;
-import org.TopAlmacen.Almacen.GestionTipoUnidad.dto.TipoUnidad;
 import org.primefaces.PrimeFaces;
 import org.primefaces.util.LangUtils;
 
@@ -18,6 +18,7 @@ import java.util.Locale;
 
 @Named
 @SessionScoped
+@Data
 public class beansGestionTipoempresa implements Serializable {
 
     @Inject
@@ -75,45 +76,4 @@ public class beansGestionTipoempresa implements Serializable {
             return 0;
         }
     }
-
-    public ServicioGestionTipoEmpresa getServicioGestionTipoEmpresa() {
-        return servicioGestionTipoEmpresa;
-    }
-
-    public void setServicioGestionTipoEmpresa(ServicioGestionTipoEmpresa servicioGestionTipoEmpresa) {
-        this.servicioGestionTipoEmpresa = servicioGestionTipoEmpresa;
-    }
-
-    public List<TipoEmpresa> getLstTabla() {
-        return lstTabla;
-    }
-
-    public void setLstTabla(List<TipoEmpresa> lstTabla) {
-        this.lstTabla = lstTabla;
-    }
-
-    public List<TipoEmpresa> getLstSeleccionado() {
-        return lstSeleccionado;
-    }
-
-    public void setLstSeleccionado(List<TipoEmpresa> lstSeleccionado) {
-        this.lstSeleccionado = lstSeleccionado;
-    }
-
-    public TipoEmpresa getTipoEmpresa() {
-        return tipoEmpresa;
-    }
-
-    public void setTipoEmpresa(TipoEmpresa tipoEmpresa) {
-        this.tipoEmpresa = tipoEmpresa;
-    }
-
-    public int getId_seleccionada() {
-        return id_seleccionada;
-    }
-
-    public void setId_seleccionada(int id_seleccionada) {
-        this.id_seleccionada = id_seleccionada;
-    }
-
 }

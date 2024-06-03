@@ -5,7 +5,8 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.TopAlmacen.Almacen.GestionRol.dto.Rol;
+import lombok.Data;
+import org.TopAlmacen.Almacen.GestionRol.model.Rol;
 import org.TopAlmacen.Almacen.GestionRol.servicio.ServicioGestionRol;
 import org.primefaces.PrimeFaces;
 import org.primefaces.util.LangUtils;
@@ -14,10 +15,10 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Locale;
 
 @Named
 @SessionScoped
+@Data
 public class beansGestionRol implements Serializable {
 
     @Inject
@@ -61,7 +62,7 @@ public class beansGestionRol implements Serializable {
         rol = new Rol();
     }
 
-    public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
+    public boolean globalFilterFunction(Object value, Object filter) {
         String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase();
         if (LangUtils.isValueBlank(filterText)) {
             return true;
@@ -83,35 +84,4 @@ public class beansGestionRol implements Serializable {
         }
     }
 
-    public List<Rol> getLstRol() {
-        return lstRol;
-    }
-
-    public void setLstRol(List<Rol> lstRol) {
-        this.lstRol = lstRol;
-    }
-
-    public Rol getRol() {
-        return rol;
-    }
-
-    public void setRol(Rol rol) {
-        this.rol = rol;
-    }
-
-    public List<Rol> getSeleccionlstRol() {
-        return SeleccionlstRol;
-    }
-
-    public void setSeleccionlstRol(List<Rol> seleccionlstRol) {
-        SeleccionlstRol = seleccionlstRol;
-    }
-
-    public int getIdSeleccionada() {
-        return idSeleccionada;
-    }
-
-    public void setIdSeleccionada(int idSeleccionada) {
-        this.idSeleccionada = idSeleccionada;
-    }
 }

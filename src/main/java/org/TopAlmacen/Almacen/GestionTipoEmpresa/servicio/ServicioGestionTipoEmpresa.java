@@ -4,8 +4,7 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import org.TopAlmacen.Almacen.GestionTipoEmpresa.dao.Impl.ImplGestionTipoEmpresa;
 import org.TopAlmacen.Almacen.GestionTipoEmpresa.dao.daoTipoEmpresa;
-import org.TopAlmacen.Almacen.GestionTipoEmpresa.dto.TipoEmpresa;
-import org.TopAlmacen.Almacen.GestionTipoUnidad.dto.TipoUnidad;
+import org.TopAlmacen.Almacen.GestionTipoEmpresa.model.TipoEmpresa;
 
 import java.io.Serializable;
 import java.sql.SQLException;

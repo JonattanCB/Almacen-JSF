@@ -4,7 +4,7 @@ import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
 import org.TopAlmacen.Almacen.GestionTipoUnidad.dao.Impl.ImplGestionTipoUnidad;
 import org.TopAlmacen.Almacen.GestionTipoUnidad.dao.daoGestionTipoUnidad;
-import org.TopAlmacen.Almacen.GestionTipoUnidad.dto.TipoUnidad;
+import org.TopAlmacen.Almacen.GestionTipoUnidad.model.TipoUnidad;
 
 import java.io.Serializable;
 import java.sql.SQLException;

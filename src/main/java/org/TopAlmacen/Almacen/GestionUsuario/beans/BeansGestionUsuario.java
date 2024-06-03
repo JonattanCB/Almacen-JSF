@@ -3,12 +3,11 @@ package org.TopAlmacen.Almacen.GestionUsuario.beans;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import lombok.Getter;
-import lombok.Setter;
-import org.TopAlmacen.Almacen.GestionPersona.dto.Persona;
-import org.TopAlmacen.Almacen.GestionTipoDocumento.dto.TipoDocumento;
+import lombok.Data;
+import org.TopAlmacen.Almacen.GestionPersona.model.Persona;
+import org.TopAlmacen.Almacen.GestionTipoDocumento.model.TipoDocumento;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.servicio.ServicioTipoDocumento;
-import org.TopAlmacen.Almacen.GestionUsuario.dto.Usuario;
+import org.TopAlmacen.Almacen.GestionUsuario.model.Usuario;
 import org.TopAlmacen.Almacen.GestionUsuario.servicio.ServicioGestionUsuario;
 import org.primefaces.util.LangUtils;
 
@@ -19,8 +18,7 @@ import java.util.Locale;
 
 @Named
 @SessionScoped
-@Getter
-@Setter
+@Data
 public class BeansGestionUsuario implements Serializable {
 
     @Inject

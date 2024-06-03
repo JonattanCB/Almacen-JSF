@@ -1,7 +1,7 @@
 package org.TopAlmacen.Almacen.GestionRol.dao.impl;
 
 import org.TopAlmacen.Almacen.GestionRol.dao.daoGestionRol;
-import org.TopAlmacen.Almacen.GestionRol.dto.Rol;
+import org.TopAlmacen.Almacen.GestionRol.model.Rol;
 import org.TopAlmacen.Almacen.Utils.conexion;
 
 import java.sql.PreparedStatement;

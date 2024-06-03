@@ -6,9 +6,9 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import lombok.Data;
 import org.TopAlmacen.Almacen.GestionCategoria.Servicio.ServicioGestionCategoria;
-import org.TopAlmacen.Almacen.GestionCategoria.dto.Categoria;
-import org.TopAlmacen.Almacen.GestionTipoDocumento.dto.TipoDocumento;
+import org.TopAlmacen.Almacen.GestionCategoria.model.Categoria;
 import org.primefaces.PrimeFaces;
 import org.primefaces.util.LangUtils;
 
@@ -20,6 +20,7 @@ import java.util.Locale;
 
 @Named
 @SessionScoped
+@Data
 public class beansGestionCategoria implements Serializable {
 
     @Inject
@@ -80,37 +81,4 @@ public class beansGestionCategoria implements Serializable {
         }
     }
 
-
-
-    public List<Categoria> getLstTabla() {
-        return lstTabla;
-    }
-
-    public void setLstTabla(List<Categoria> lstTabla) {
-        this.lstTabla = lstTabla;
-    }
-
-    public List<Categoria> getLstSeleccionado() {
-        return lstSeleccionado;
-    }
-
-    public void setLstSeleccionado(List<Categoria> lstSeleccionado) {
-        this.lstSeleccionado = lstSeleccionado;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
-
-    public int getId_seleccionada() {
-        return id_seleccionada;
-    }
-
-    public void setId_seleccionada(int id_seleccionada) {
-        this.id_seleccionada = id_seleccionada;
-    }
 }
