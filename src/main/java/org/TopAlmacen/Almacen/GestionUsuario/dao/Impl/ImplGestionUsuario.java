@@ -78,7 +78,7 @@ public class ImplGestionUsuario implements daoGestionUsuario {
                 Usuario u = new Usuario();
                 u.setId(rs.getInt(1));
                 u.setCorreo(rs.getString(2));
-                u.setContraseña(rs.getString(3));
+                u.setContrasenia(rs.getString(3));
                 u.setRol(daorol.buscar(rs.getInt(4)));
                 u.setPersonas(daopersonal.buscar(rs.getInt(5)));
                 u.setEstado(rs.getString(6));

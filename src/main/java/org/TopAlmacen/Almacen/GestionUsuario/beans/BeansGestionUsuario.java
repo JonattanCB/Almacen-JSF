@@ -29,15 +29,15 @@ public class BeansGestionUsuario implements Serializable {
 
     private List<Usuario> lstTabla;
     private List<Usuario> lstTablaSeleccionada;
-    private Usuario usuario;
     private List<TipoDocumento> lstTipoDocumento;
     private TipoDocumento selectedTipoDocumento;
     private Persona persona;
+    private Usuario usuario;
 
 
     public void guardarUsuario(){
         System.out.println(persona.getPnombre());
-        System.out.println(selectedTipoDocumento);
+        System.out.println(selectedTipoDocumento.getId());
     }
 
     public String irUsuario() throws SQLException {
