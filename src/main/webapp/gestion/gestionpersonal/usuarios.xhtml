@@ -69,11 +69,55 @@
     <h:form id="dialogs">
         <p:dialog header="Detalles del Usuario" showEffect="fade" modal="true" widgetVar="userdialog" width="800" height="400" responsive="true" styleClass="dialogs-barra">
             <p:outputPanel id="userdialog-content" styleClass="ui-fluid" >
-                <h1>Hola mundo</h1>
+                <p:accordionPanel multiple="true" >
+                    <p:tab>
+                        <h:panelGrid columns="2" width="100%">
+                            <h:panelGrid width="95%">
+                                    <p:outputLabel for="pnombre" value="Primer Nombre" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.pnombre}"  id="pnombre" required="true" />
+                            </h:panelGrid>
+                            <h:panelGrid  width="95%">
+                                    <p:outputLabel for="snombre" value="Segundo Nombre" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.snombre}"  id="snombre" required="true" />
+                            </h:panelGrid>
+                        </h:panelGrid><br/>
+                        <h:panelGrid columns="2" width="100%">
+                            <h:panelGrid width="95%">
+                                    <p:outputLabel for="apaterno" value="Apellido Paterno" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.apatero}"   id="apaterno" required="true" />
+                            </h:panelGrid>
+                            <h:panelGrid width="95%">
+                                    <p:outputLabel for="amaterno" value="Apellido Materno" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.amatero}"  id="amaterno" required="true" />
+                            </h:panelGrid>
+                        </h:panelGrid><br/>
+                        <h:panelGrid columns="2" width="100%">
+                            <h:panelGrid width="95%">
+                                    <p:outputLabel for="tdocumento"  value="Tipo de Documento"/>
+                                    <p:selectOneMenu id="tdocumento" value="#{beansGestionUsuario.selectedTipoDocumento}" required="true" style="width: 100%" >
+                                        <f:selectItem  noSelectionOption="true" itemLabel="Seleccionar Opcion"  />
+                                        <f:selectItems  value="#{beansGestionUsuario.lstTipoDocumento}" var="td" itemLabel="#{td.nombre}" itemValue="#{td.id}" />
+                                    </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid width="95%">
+                                    <p:outputLabel for="ndocumento" value="Numero de Documento" />
+                                    <p:inputNumber  value="#{beansGestionUsuario.persona.ndocumento}"  id="ndocumento" required="true" />
+                            </h:panelGrid>
+                        </h:panelGrid><br/>
+                        <h:panelGrid width="97%">
+                            <p:outputLabel for="direccion" value="Direccion" />
+                            <p:inputText id="direccion"  value="#{beansGestionUsuario.persona.direccion}" required="true" />
+                        </h:panelGrid><br/>
+                        <h:panelGrid width="97%">
+                            <p:outputLabel for="telefono" value="Telefono" />
+                            <p:inputText id="telefono"  value="#{beansGestionUsuario.persona.telefono}" required="true" />
+                        </h:panelGrid><br/>
+                    </p:tab>
 
-                <h:selectOneMenu value="#{beansGestionUsuario.selectedTipoDocumento}" >
-                    <f:selectItems  value="#{beansGestionUsuario.lstTipoDocumento}" var="td" itemValue="#{td.id}"/>
-                </h:selectOneMenu>
+                </p:accordionPanel>
+
+
+
 
             </p:outputPanel>
             <f:facet name="footer">

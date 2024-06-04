@@ -48,6 +48,12 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.omnifaces</groupId>
+      <artifactId>omnifaces</artifactId>
+      <version>4.4.1</version>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -60,14 +66,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <reporting>
-    <plugins>
-      <plugin>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </reporting>
-
 
 </project>
