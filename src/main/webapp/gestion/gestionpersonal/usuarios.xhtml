@@ -68,9 +68,9 @@
 
     <h:form id="dialogs">
         <p:dialog header="Detalles del Usuario" showEffect="fade" modal="true" widgetVar="userdialog" width="800" height="400" responsive="true" styleClass="dialogs-barra">
-            <p:outputPanel id="userdialog-content" styleClass="ui-fluid" >
+            <p:outputPanel id="userdialog-content" styleClass="ui-fluid dialogs-barra"  >
                 <p:accordionPanel multiple="true" >
-                    <p:tab>
+                    <p:tab title="Datos Personales ">
                         <h:panelGrid columns="2" width="100%">
                             <h:panelGrid width="95%">
                                     <p:outputLabel for="pnombre" value="Primer Nombre" />
@@ -82,7 +82,7 @@
                             </h:panelGrid>
                         </h:panelGrid><br/>
                         <h:panelGrid columns="2" width="100%">
-                            <h:panelGrid width="95%">
+                            <h:panelGrid width="95%" >
                                     <p:outputLabel for="apaterno" value="Apellido Paterno" />
                                     <p:inputText  value="#{beansGestionUsuario.persona.apatero}"   id="apaterno" required="true" />
                             </h:panelGrid>
@@ -92,14 +92,14 @@
                             </h:panelGrid>
                         </h:panelGrid><br/>
                         <h:panelGrid columns="2" width="100%">
-                            <h:panelGrid width="95%">
-                                    <p:outputLabel for="tdocumento"  value="Tipo de Documento"/>
-                                    <p:selectOneMenu id="tdocumento" value="#{beansGestionUsuario.selectedTipoDocumento}" required="true" style="width: 100%" >
+                            <h:panelGrid width="95%" >
+                                    <p:outputLabel for="tdocumento"  value="Tipo de Documento" style="width: 300px"/>
+                                    <p:selectOneMenu id="tdocumento" value="#{beansGestionUsuario.selectedTipoDocumento}" required="true" style="width:100%" >
                                         <f:selectItem  noSelectionOption="true" itemLabel="Seleccionar Opcion"  />
-                                        <f:selectItems  value="#{beansGestionUsuario.lstTipoDocumento}" var="td" itemLabel="#{td.nombre}" itemValue="#{td.id}" />
+                                        <f:selectItems  value="#{beansGestionUsuario.lstTipoDocumento}" var="td" itemLabel="#{td.nombre}" itemValue="#{td.id}"  />
                                     </p:selectOneMenu>
                             </h:panelGrid>
-                            <h:panelGrid width="95%">
+                            <h:panelGrid width="95%" >
                                     <p:outputLabel for="ndocumento" value="Numero de Documento" />
                                     <p:inputNumber  value="#{beansGestionUsuario.persona.ndocumento}"  id="ndocumento" required="true" />
                             </h:panelGrid>
@@ -110,12 +110,35 @@
                         </h:panelGrid><br/>
                         <h:panelGrid width="97%">
                             <p:outputLabel for="telefono" value="Telefono" />
-                            <p:inputText id="telefono"  value="#{beansGestionUsuario.persona.telefono}" required="true" />
+                            <p:inputNumber id="telefono"  value="#{beansGestionUsuario.persona.telefono}" required="true" />
                         </h:panelGrid><br/>
                     </p:tab>
-
+                </p:accordionPanel><br/>
+                <p:accordionPanel>
+                    <p:tab title="Datos Usuario">
+                        <h:panelGrid columns="2" width="100%">
+                            <h:panelGrid width="180">
+                                <p:outputLabel for="rol" value="Rol Encargado" />
+                            </h:panelGrid>
+                            <h:panelGrid  width="500">
+                                <p:selectOneMenu  id="rol" value="#{beansGestionUsuario.selectedRol}" required="true" style="width: 100%" >
+                                    <f:selectItem noSelectionOption="true" itemLabel="Selecionar Opcion" />
+                                    <f:selectItems  value="#{beansGestionUsuario.lstRol}" var="rol" itemLabel="#{rol.nombre}" itemValue="#{rol.id}" itemDescription="#{rol.descripcion}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid><br/>
+                        <h:panelGrid columns="2" width="100%">
+                            <h:panelGrid width="95%">
+                                <p:outputLabel for="correo" value="Correo" />
+                                <p:inputText  value="#{beansGestionUsuario.usuario.correo}"  id="correo" required="true" />
+                            </h:panelGrid>
+                            <h:panelGrid  width="95%">
+                                <p:outputLabel for="Contrasenia" value="Contraseña" />
+                                <p:inputText value="#{beansGestionUsuario.usuario.contrasenia}"  id="Contrasenia" required="true" />
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:tab>
                 </p:accordionPanel>
-
 
 
 

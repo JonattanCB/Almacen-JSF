@@ -5,6 +5,8 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Data;
 import org.TopAlmacen.Almacen.GestionPersona.model.Persona;
+import org.TopAlmacen.Almacen.GestionRol.model.Rol;
+import org.TopAlmacen.Almacen.GestionRol.servicio.ServicioGestionRol;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.model.TipoDocumento;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.servicio.ServicioTipoDocumento;
 import org.TopAlmacen.Almacen.GestionUsuario.model.Usuario;
@@ -24,23 +26,31 @@ import java.util.Map;
 @Data
 public class BeansGestionUsuario implements Serializable {
 
+    /*  ================================== Inyecciones  ==================== */
     @Inject
     private ServicioGestionUsuario servicioGestionUsuario;
 
     @Inject
     private ServicioTipoDocumento servicioTipoDocumento;
 
+    @Inject
+    private ServicioGestionRol servicioGestionRol;
+
+
     private List<Usuario> lstTabla;
     private List<Usuario> lstTablaSeleccionada;
     private List<TipoDocumento> lstTipoDocumento;
+    private List<Rol> lstRol;
     private int selectedTipoDocumento;
+    private int selectedRol;
     private Persona persona;
     private Usuario usuario;
 
-
     public void guardarUsuario(){
         System.out.println("Aca entra");
-        System.out.println(selectedTipoDocumento);
+        System.out.println("ID: Documento "+selectedTipoDocumento);
+        System.out.println("ID: Rol" + selectedRol);
+
         PrimeFaces.current().executeScript("PF('userdialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-user");
     }
@@ -52,9 +62,11 @@ public class BeansGestionUsuario implements Serializable {
 
     public void abrirNuevoUsuario() throws SQLException {
         this.selectedTipoDocumento = 0;
+        this.selectedRol = 0;
         this.persona = new Persona();
         this.usuario = new Usuario();
-        lstTipoDocumento =servicioTipoDocumento.listaTipoDocumento();
+        this.lstTipoDocumento = servicioTipoDocumento.listaTipoDocumento();
+        this.lstRol = servicioGestionRol.listarRol();
     }
 
     public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
