@@ -9,12 +9,15 @@ import org.TopAlmacen.Almacen.GestionTipoDocumento.model.TipoDocumento;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.servicio.ServicioTipoDocumento;
 import org.TopAlmacen.Almacen.GestionUsuario.model.Usuario;
 import org.TopAlmacen.Almacen.GestionUsuario.servicio.ServicioGestionUsuario;
+import org.primefaces.PrimeFaces;
 import org.primefaces.util.LangUtils;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 @Named
 @SessionScoped
@@ -30,14 +33,16 @@ public class BeansGestionUsuario implements Serializable {
     private List<Usuario> lstTabla;
     private List<Usuario> lstTablaSeleccionada;
     private List<TipoDocumento> lstTipoDocumento;
-    private TipoDocumento selectedTipoDocumento;
+    private int selectedTipoDocumento;
     private Persona persona;
     private Usuario usuario;
 
 
     public void guardarUsuario(){
-        System.out.println(persona.getPnombre());
-        System.out.println(selectedTipoDocumento.getId());
+        System.out.println("Aca entra");
+        System.out.println(selectedTipoDocumento);
+        PrimeFaces.current().executeScript("PF('userdialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-user");
     }
 
     public String irUsuario() throws SQLException {
@@ -46,10 +51,10 @@ public class BeansGestionUsuario implements Serializable {
     }
 
     public void abrirNuevoUsuario() throws SQLException {
-        lstTipoDocumento = servicioTipoDocumento.listaTipoDocumento();
-        this.selectedTipoDocumento = new TipoDocumento();
+        this.selectedTipoDocumento = 0;
         this.persona = new Persona();
         this.usuario = new Usuario();
+        lstTipoDocumento =servicioTipoDocumento.listaTipoDocumento();
     }
 
     public boolean globalFilterFunction(Object value, Object filter, Locale locale) {

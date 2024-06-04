@@ -69,64 +69,12 @@
     <h:form id="dialogs">
         <p:dialog header="Detalles del Usuario" showEffect="fade" modal="true" widgetVar="userdialog" width="800" height="400" responsive="true" styleClass="dialogs-barra">
             <p:outputPanel id="userdialog-content" styleClass="ui-fluid" >
-                <p:accordionPanel multiple="true">
-                    <p:tab title="Datos Personal">
-                        <h:panelGrid columns="2" style="width: 100%">
-                            <h:panelGrid>
-                                <div class="field col">
-                                    <p:outputLabel for="pnombre" value="Primer Nombre" />
-                                    <p:inputText  value="#{beansGestionUsuario.persona.pnombre}"  id="pnombre" required="true" />
-                                </div>
-                            </h:panelGrid>
-                            <h:panelGrid>
-                                <div class="field col">
-                                    <p:outputLabel for="snombre" value="Segundo Nombre" />
-                                    <p:inputText  value="#{beansGestionUsuario.persona.snombre}"  id="snombre" required="true" />
-                                </div>
-                            </h:panelGrid>
-                        </h:panelGrid>
-                        <h:panelGrid columns="2" style="width: 100%">
-                            <h:panelGrid>
-                                <div class="field col" style="width: 100%">
-                                    <p:outputLabel for="apaterno" value="Apellido Paterno" />
-                                    <p:inputText  value="#{beansGestionUsuario.persona.apatero}"   id="apaterno" required="true" />
-                                </div>
-                            </h:panelGrid>
-                            <h:panelGrid>
-                                <div class="field col"  style="width: 100%">
-                                    <p:outputLabel for="amaterno" value="Apellido Materno" />
-                                    <p:inputText  value="#{beansGestionUsuario.persona.amatero}"  id="amaterno" required="true" />
-                                </div>
-                            </h:panelGrid>
-                        </h:panelGrid>
-                        <h:panelGrid columns="2" style="width: 100%">
-                            <h:panelGrid>
-                                <div class="field">
-                                    <p:outputLabel  for="tdocumento"  value="Id tipo documento" />
-                                    <br/>
-                                    <p:inputText id="tdocumento" value="#{beansGestionUsuario.selectedTipoDocumento.id}"  required="true"/>
-                                </div>
-                            </h:panelGrid>
-                            <h:panelGrid>
-                                <div class="field col"  style="width: 100%">
-                                    <p:outputLabel for="ndocumento" value="Numero de Documento" />
-                                    <p:inputNumber  value="#{beansGestionUsuario.persona.ndocumento}"  id="ndocumento" required="true" />
-                                </div>
-                            </h:panelGrid>
-                        </h:panelGrid>
-                        <div class="field">
-                            <p:outputLabel  for="direccion"  value="Direccion" />
-                            <br/>
-                            <p:inputText id="direccion" value="#{beansGestionUsuario.persona.direccion}"  required="true"/>
-                        </div>
-                        <div class="field">
-                            <p:outputLabel  for="telefono"  value="telefono" />
-                            <br/>
-                            <p:inputText id="telefono" value="#{beansGestionUsuario.persona.telefono}"  required="true"/>
-                        </div>
-                    </p:tab>
+                <h1>Hola mundo</h1>
 
-                </p:accordionPanel>
+                <h:selectOneMenu value="#{beansGestionUsuario.selectedTipoDocumento}" >
+                    <f:selectItems  value="#{beansGestionUsuario.lstTipoDocumento}" var="td" itemValue="#{td.id}"/>
+                </h:selectOneMenu>
+
             </p:outputPanel>
             <f:facet name="footer">
                 <p:commandButton value="Guardar"  icon="pi pi-check" action="#{beansGestionUsuario.guardarUsuario()}" update="userdialog-content" process="userdialog-content @this" />
