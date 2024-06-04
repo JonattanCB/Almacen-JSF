@@ -61,6 +61,11 @@
                     <h:outputText value="#{user.personas.ndocumento}" />
                 </p:column>
                 <p:column headerText="Acciones">
+                    <p:commandButton icon="pi pi-pencil" update=":dialogs:userdialog-content"
+                                     oncomplete="PF('userdialog').show()" action="#{beansGestionUsuario.abrirUsuario}"
+                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                        <f:setPropertyActionListener value="#{user.id}" target="#{beansGestionUsuario.idSeleccionadaUsuario}" />
+                    </p:commandButton> |
                 </p:column>
             </p:dataTable>
         </p:panel>
@@ -78,7 +83,7 @@
                             </h:panelGrid>
                             <h:panelGrid  width="95%">
                                     <p:outputLabel for="snombre" value="Segundo Nombre" />
-                                    <p:inputText  value="#{beansGestionUsuario.persona.snombre}"  id="snombre" required="true" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.snombre}"  id="snombre" />
                             </h:panelGrid>
                         </h:panelGrid><br/>
                         <h:panelGrid columns="2" width="100%">
@@ -101,7 +106,7 @@
                             </h:panelGrid>
                             <h:panelGrid width="95%" >
                                     <p:outputLabel for="ndocumento" value="Numero de Documento" />
-                                    <p:inputNumber  value="#{beansGestionUsuario.persona.ndocumento}"  id="ndocumento" required="true" />
+                                    <p:inputText type="number"  value="#{beansGestionUsuario.persona.ndocumento}"  id="ndocumento" required="true" />
                             </h:panelGrid>
                         </h:panelGrid><br/>
                         <h:panelGrid width="97%">
@@ -110,7 +115,7 @@
                         </h:panelGrid><br/>
                         <h:panelGrid width="97%">
                             <p:outputLabel for="telefono" value="Telefono" />
-                            <p:inputNumber id="telefono"  value="#{beansGestionUsuario.persona.telefono}" required="true" />
+                            <p:inputText id="telefono" type="number"  value="#{beansGestionUsuario.persona.telefono}" required="true" />
                         </h:panelGrid><br/>
                     </p:tab>
                 </p:accordionPanel><br/>
@@ -133,15 +138,12 @@
                                 <p:inputText  value="#{beansGestionUsuario.usuario.correo}"  id="correo" required="true" />
                             </h:panelGrid>
                             <h:panelGrid  width="95%">
-                                <p:outputLabel for="Contrasenia" value="Contraseña" />
-                                <p:inputText value="#{beansGestionUsuario.usuario.contrasenia}"  id="Contrasenia" required="true" />
+                                <p:outputLabel for="Contrasenia" value="Contraseña" rendered="#{beansGestionUsuario.usuario.id eq 0 }" />
+                                <p:inputText value="#{beansGestionUsuario.usuario.contrasenia}"  id="Contrasenia" required="true" rendered="#{beansGestionUsuario.usuario.id eq 0 }" />
                             </h:panelGrid>
                         </h:panelGrid>
                     </p:tab>
                 </p:accordionPanel>
-
-
-
             </p:outputPanel>
             <f:facet name="footer">
                 <p:commandButton value="Guardar"  icon="pi pi-check" action="#{beansGestionUsuario.guardarUsuario()}" update="userdialog-content" process="userdialog-content @this" />

@@ -1,5 +1,6 @@
 package org.TopAlmacen.Almacen.GestionTipoDocumento.dao.Impl;
 
+import org.TopAlmacen.Almacen.GestionRol.model.Rol;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.dao.daoGestionTipoDocumento;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.model.TipoDocumento;
 import org.TopAlmacen.Almacen.Utils.conexion;

@@ -1,5 +1,6 @@
 package org.TopAlmacen.Almacen.GestionTipoEmpresa.beans;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -24,11 +25,19 @@ public class beansGestionTipoempresa implements Serializable {
     @Inject
     private ServicioGestionTipoEmpresa servicioGestionTipoEmpresa;
 
-
     private List<TipoEmpresa> lstTabla;
     private List<TipoEmpresa> lstSeleccionado;
     private TipoEmpresa tipoEmpresa;
     private int id_seleccionada;
+
+    @PostConstruct
+    public void init(){
+        try {
+            lstTabla = servicioGestionTipoEmpresa.lstTodo();
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+    }
 
     public String irTipoEmpresa() throws SQLException {
         lstTabla = servicioGestionTipoEmpresa.lstTodo();

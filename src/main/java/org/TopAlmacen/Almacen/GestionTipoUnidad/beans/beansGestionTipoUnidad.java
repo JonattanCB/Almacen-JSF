@@ -1,5 +1,6 @@
 package org.TopAlmacen.Almacen.GestionTipoUnidad.beans;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -28,6 +29,15 @@ public class beansGestionTipoUnidad implements Serializable {
     private List<TipoUnidad> lstSeleccionado;
     private TipoUnidad tipoUnidad;
     private int id_seleccionada;
+
+    @PostConstruct
+    public void init(){
+        try {
+            lstTabla = servicioGestionTipoUnidad.lstTipoUnidad();
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+    }
 
     public String irTipoUnidad() throws SQLException {
         lstTabla = servicioGestionTipoUnidad.lstTipoUnidad();
@@ -75,5 +85,4 @@ public class beansGestionTipoUnidad implements Serializable {
             return 0;
         }
     }
-
 }

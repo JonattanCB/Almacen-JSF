@@ -16,20 +16,61 @@ public class ImplGestionPersona implements daoGestionPersona {
     private final conexion con = new conexion();
     private final daoGestionTipoDocumento daotd = new ImplGestionTipoDocumento();
 
-
     @Override
     public void registrar(Persona persona) throws SQLException {
-
+        try{
+            PreparedStatement ps = con.crearCNX().prepareStatement("INSERT INTO public.personas(\n" +
+                    "\tpnombre, snombre, apaterno, amaterno, tdocumento, ndocumento, direccion, telefono, estado)\n" +
+                    "\tVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
+            ps.setString(1,persona.getPnombre());
+            ps.setString(2,persona.getSnombre());
+            ps.setString(3,persona.getApatero());
+            ps.setString(4,persona.getAmatero());
+            ps.setInt(5, persona.getTipoDocumento().getId());
+            ps.setInt(6, persona.getNdocumento());
+            ps.setString(7, persona.getDireccion());
+            ps.setString(8, persona.getEstado());
+            ps.execute();
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
     }
 
     @Override
     public void actualizar(Persona persona) throws SQLException {
-
+        try{
+            PreparedStatement ps = con.crearCNX().prepareStatement("UPDATE public.personas\n" +
+                    "\tSET  pnombre=?, snombre=?, apaterno=?, amaterno=?, tdocumento=?, ndocumento=?, direccion=?, telefono=? \n" +
+                    "\tWHERE id=?;");
+            ps.setString(1,persona.getPnombre());
+            ps.setString(2,persona.getSnombre());
+            ps.setString(3,persona.getApatero());
+            ps.setString(4,persona.getAmatero());
+            ps.setInt(5, persona.getTipoDocumento().getId());
+            ps.setInt(6, persona.getNdocumento());
+            ps.setString(7, persona.getDireccion());
+            ps.setInt(8, persona.getTelefono());
+            ps.setInt(9,persona.getId());
+            ps.execute();
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
     }
 
     @Override
     public void eliminar(Persona persona) throws SQLException {
+        try{
+            PreparedStatement ps = con.crearCNX().prepareStatement("");
 
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
     }
 
     @Override
@@ -63,5 +104,33 @@ public class ImplGestionPersona implements daoGestionPersona {
     @Override
     public List<Persona> buscarTodos() throws SQLException {
         return List.of();
+    }
+
+    @Override
+    public int registraPersonaRetornaID(Persona persona) throws SQLException {
+        int id = 0;
+        try{
+            PreparedStatement ps = con.crearCNX().prepareStatement("INSERT INTO public.personas(\n" +
+                    "\tpnombre, snombre, apaterno, amaterno, tdocumento, ndocumento, direccion, telefono, estado)\n" +
+                    "\tVALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id ;");
+            ps.setString(1,persona.getPnombre());
+            ps.setString(2,persona.getSnombre());
+            ps.setString(3,persona.getApatero());
+            ps.setString(4,persona.getAmatero());
+            ps.setInt(5, persona.getTipoDocumento().getId());
+            ps.setInt(6, persona.getNdocumento());
+            ps.setString(7, persona.getDireccion());
+            ps.setInt(8, persona.getTelefono());
+            ps.setString(9, "1");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                id = rs.getInt(1);
+            }
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
+        return id;
     }
 }

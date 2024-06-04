@@ -1,5 +1,6 @@
 package org.TopAlmacen.Almacen.GestionTipoDocumento.beans;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -29,6 +30,15 @@ public class BeansGestionTipoDocumento implements Serializable {
     private List<TipoDocumento> list_tdocumento;
     private List<TipoDocumento> list_tdocumentoSeleccionado;
     private int ID_TipoDocumento;
+
+    @PostConstruct
+    public void init(){
+        try {
+            list_tdocumento = servicioTipoDocumento.listaTipoDocumento();
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+    }
 
     public void abrirNuevoTipoDocumento() {
         this.tipoDocumento = new TipoDocumento();
@@ -64,7 +74,6 @@ public class BeansGestionTipoDocumento implements Serializable {
         if (LangUtils.isValueBlank(filterText)) {
             return true;
         }
-        System.out.println(filterText);
         int filterInt = getInteger(filterText);
         TipoDocumento td = (TipoDocumento) value;
         return  (td.getId()>=filterInt && td.getId()<=filterInt)

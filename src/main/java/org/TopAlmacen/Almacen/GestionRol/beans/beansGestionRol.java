@@ -1,5 +1,6 @@
 package org.TopAlmacen.Almacen.GestionRol.beans;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -25,9 +26,18 @@ public class beansGestionRol implements Serializable {
     private ServicioGestionRol servicioGestionRol;
 
     private List<Rol> lstRol;
-    private Rol rol;
     private List<Rol> SeleccionlstRol;
+    private Rol rol;
     private int idSeleccionada;
+
+    @PostConstruct
+    public void init(){
+        try{
+            lstRol = servicioGestionRol.listarRol();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
 
     public String irRol() throws SQLException {
         lstRol = servicioGestionRol.listarRol();
@@ -35,23 +45,19 @@ public class beansGestionRol implements Serializable {
     }
 
     public void abrirRol() throws SQLException {
-        System.out.println(idSeleccionada);
         rol = servicioGestionRol.buscarRol(idSeleccionada);
     }
 
     public void GuardarRol() throws SQLException {
-
         if (rol.getId() == 0){
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             rol.setEstado("1");
             rol.setCfecha(timestamp);
             servicioGestionRol.insertarRol(rol);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Rol Agregado"));
-            System.out.println("nuevo");
         }else{
             servicioGestionRol.modificarRol(rol);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Rol Editado"));
-            System.out.println("viejo");
         }
         lstRol = servicioGestionRol.listarRol();
         PrimeFaces.current().executeScript("PF('roldialog').hide()");

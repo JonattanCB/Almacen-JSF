@@ -33,5 +33,4 @@ public class ServicioGestionRol implements Serializable {
         return dao.buscar(id);
     }
 
-
 }

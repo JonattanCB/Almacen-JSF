@@ -24,11 +24,18 @@ public class ImplGestionUsuario implements daoGestionUsuario {
     @Override
     public void registrar(Usuario usuario) throws SQLException {
         try {
-            PreparedStatement ps = con.crearCNX().prepareStatement("");
-
-
+            PreparedStatement ps = con.crearCNX().prepareStatement("INSERT INTO public.usuario(\n" +
+                    "\t correo, contrasenia, rol_id, persona_id, estado, \"Cfecha\")\n" +
+                    "\tVALUES ( ?, ?, ?, ?, ?, ?);");
+            ps.setString(1,usuario.getCorreo());
+            ps.setString(2,usuario.getContrasenia());
+            ps.setInt(3, usuario.getRol().getId());
+            ps.setInt(4, usuario.getPersonas().getId());
+            ps.setString(5, usuario.getEstado());
+            ps.setTimestamp(6,usuario.getCfecha());
+            ps.execute();
         }catch (SQLException e){
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }finally {
             con.cerrar();
         }
@@ -37,11 +44,16 @@ public class ImplGestionUsuario implements daoGestionUsuario {
     @Override
     public void actualizar(Usuario usuario) throws SQLException {
         try {
-            PreparedStatement ps = con.crearCNX().prepareStatement("");
-
-
+            PreparedStatement ps = con.crearCNX().prepareStatement("UPDATE public.usuario\n" +
+                    "\tSET correo=?, contrasenia=?, rol_id=?\n" +
+                    "\tWHERE id=?;");
+            ps.setString(1, usuario.getCorreo());
+            ps.setString(2, usuario.getContrasenia());
+            ps.setInt(3,usuario.getRol().getId());
+            ps.setInt(4, usuario.getId());
+            ps.execute();
         }catch (SQLException e){
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }finally {
             con.cerrar();
         }
@@ -56,9 +68,19 @@ public class ImplGestionUsuario implements daoGestionUsuario {
     public Usuario buscar(int t) throws SQLException {
         Usuario  u = new Usuario();
         try {
-            PreparedStatement ps = con.crearCNX().prepareStatement("");
-
-
+            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, correo, contrasenia, rol_id, persona_id, estado, \"Cfecha\"\n" +
+                    "\tFROM public.usuario where id =?;");
+            ps.setInt(1, t);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                u.setId(rs.getInt(1));
+                u.setCorreo(rs.getString(2));
+                u.setContrasenia(rs.getString(3));
+                u.setRol(daorol.buscar(rs.getInt(4)));
+                u.setPersonas(daopersonal.buscar(rs.getInt(5)));
+                u.setEstado(rs.getString(6));
+                u.setCfecha(rs.getTimestamp(7));
+            }
         }catch (SQLException e){
             System.err.println(e);
         }finally {
@@ -71,7 +93,7 @@ public class ImplGestionUsuario implements daoGestionUsuario {
     public List<Usuario> buscarTodos() throws SQLException {
         List<Usuario> lst = new ArrayList<>();
         try {
-            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, usuario, contrasenia, rol_id, persona_id, estado, \"Cfecha\"\n" +
+            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, correo, contrasenia, rol_id, persona_id, estado, \"Cfecha\"\n" +
                     "\tFROM public.usuario order by id;");
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
@@ -86,7 +108,7 @@ public class ImplGestionUsuario implements daoGestionUsuario {
                 lst.add(u);
             }
         }catch (SQLException e){
-            System.err.println(e);
+            System.err.println(e.getMessage());
         }finally {
             con.cerrar();
         }

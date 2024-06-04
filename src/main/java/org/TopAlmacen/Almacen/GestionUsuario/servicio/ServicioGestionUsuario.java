@@ -21,4 +21,16 @@ public class ServicioGestionUsuario implements Serializable {
         return lst;
     }
 
+    public void registrarUsuario(Usuario u) throws SQLException {
+        dao.registrar(u);
+    }
+
+    public Usuario buscarUsuario(int id) throws SQLException {
+        return  dao.buscar(id);
+    }
+
+    public void editarUsuario(Usuario u) throws SQLException {
+        dao.actualizar(u);
+    }
+
 }

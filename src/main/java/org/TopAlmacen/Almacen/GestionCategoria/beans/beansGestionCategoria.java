@@ -1,6 +1,7 @@
 package org.TopAlmacen.Almacen.GestionCategoria.beans;
 
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -30,6 +31,15 @@ public class beansGestionCategoria implements Serializable {
     private List<Categoria> lstSeleccionado;
     private Categoria categoria;
     private int id_seleccionada;
+
+    @PostConstruct
+    public void init() {
+        try{
+            lstTabla = servicioGestionCategoria.lstCategoria();
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+    }
 
     public String irCategoria() throws SQLException {
         lstTabla = servicioGestionCategoria.lstCategoria();

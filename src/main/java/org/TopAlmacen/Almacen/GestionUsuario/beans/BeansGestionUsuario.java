@@ -1,9 +1,11 @@
 package org.TopAlmacen.Almacen.GestionUsuario.beans;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Data;
+import org.TopAlmacen.Almacen.GestionPersona.Servicio.ServicioPersona;
 import org.TopAlmacen.Almacen.GestionPersona.model.Persona;
 import org.TopAlmacen.Almacen.GestionRol.model.Rol;
 import org.TopAlmacen.Almacen.GestionRol.servicio.ServicioGestionRol;
@@ -16,6 +18,7 @@ import org.primefaces.util.LangUtils;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +30,9 @@ import java.util.Map;
 public class BeansGestionUsuario implements Serializable {
 
     /*  ================================== Inyecciones  ==================== */
+    @Inject
+    private ServicioPersona servicioPersona;
+
     @Inject
     private ServicioGestionUsuario servicioGestionUsuario;
 
@@ -43,14 +49,46 @@ public class BeansGestionUsuario implements Serializable {
     private List<Rol> lstRol;
     private int selectedTipoDocumento;
     private int selectedRol;
+    private int idSeleccionadaUsuario;
     private Persona persona;
     private Usuario usuario;
 
-    public void guardarUsuario(){
-        System.out.println("Aca entra");
-        System.out.println("ID: Documento "+selectedTipoDocumento);
-        System.out.println("ID: Rol" + selectedRol);
+    @PostConstruct
+    private  void init(){
+        try{
+            lstTabla = servicioGestionUsuario.listaUsuario();
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
 
+    }
+
+    public void abrirUsuario() throws SQLException {
+        this.lstTipoDocumento = servicioTipoDocumento.listaTipoDocumento();
+        this.lstRol = servicioGestionRol.listarRol();
+        this.usuario = servicioGestionUsuario.buscarUsuario(idSeleccionadaUsuario);
+        this.persona = usuario.getPersonas();
+        this.selectedTipoDocumento = persona.getTipoDocumento().getId();
+        this.selectedRol = usuario.getRol().getId();
+    }
+
+    public void guardarUsuario  () throws SQLException {
+        if (usuario.getId() == 0){
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            persona.setTipoDocumento(servicioTipoDocumento.buscarTipoDocumento(selectedTipoDocumento));
+            persona.setId(servicioPersona.registrarRetornadoID(persona));
+            usuario.setPersonas(persona);
+            usuario.setRol(servicioGestionRol.buscarRol(selectedRol));
+            usuario.setEstado("1");
+            usuario.setCfecha(timestamp);
+            servicioGestionUsuario.registrarUsuario(usuario);
+        }else{
+            persona.setTipoDocumento(servicioTipoDocumento.buscarTipoDocumento(selectedTipoDocumento));
+            servicioPersona.editarPersona(persona);
+            usuario.setRol(servicioGestionRol.buscarRol(selectedRol));
+            servicioGestionUsuario.editarUsuario(usuario);
+        }
+        lstTabla = servicioGestionUsuario.listaUsuario();
         PrimeFaces.current().executeScript("PF('userdialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-user");
     }
