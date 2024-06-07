@@ -1,4 +1,4 @@
-package org.TopAlmacen.Almacen.GestionPersona.model;
+package org.TopAlmacen.Almacen.GestionUsuario.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

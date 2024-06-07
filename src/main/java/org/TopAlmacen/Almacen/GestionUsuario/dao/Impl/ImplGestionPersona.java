@@ -1,7 +1,7 @@
-package org.TopAlmacen.Almacen.GestionPersona.dao.Impl;
+package org.TopAlmacen.Almacen.GestionUsuario.dao.Impl;
 
-import org.TopAlmacen.Almacen.GestionPersona.dao.daoGestionPersona;
-import org.TopAlmacen.Almacen.GestionPersona.model.Persona;
+import org.TopAlmacen.Almacen.GestionUsuario.dao.daoGestionPersona;
+import org.TopAlmacen.Almacen.GestionUsuario.model.Persona;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.dao.Impl.ImplGestionTipoDocumento;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.dao.daoGestionTipoDocumento;
 import org.TopAlmacen.Almacen.Utils.conexion;

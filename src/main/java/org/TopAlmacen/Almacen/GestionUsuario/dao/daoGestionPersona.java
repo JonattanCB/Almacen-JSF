@@ -1,7 +1,7 @@
-package org.TopAlmacen.Almacen.GestionPersona.dao;
+package org.TopAlmacen.Almacen.GestionUsuario.dao;
 
 import org.TopAlmacen.Almacen.Dao.Crud;
-import org.TopAlmacen.Almacen.GestionPersona.model.Persona;
+import org.TopAlmacen.Almacen.GestionUsuario.model.Persona;
 
 import java.sql.SQLException;
 

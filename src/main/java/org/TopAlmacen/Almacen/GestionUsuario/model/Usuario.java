@@ -3,7 +3,6 @@ package org.TopAlmacen.Almacen.GestionUsuario.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.TopAlmacen.Almacen.GestionPersona.model.Persona;
 import org.TopAlmacen.Almacen.GestionRol.model.Rol;
 
 import java.sql.Timestamp;

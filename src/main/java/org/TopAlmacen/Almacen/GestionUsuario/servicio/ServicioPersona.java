@@ -1,10 +1,10 @@
-package org.TopAlmacen.Almacen.GestionPersona.Servicio;
+package org.TopAlmacen.Almacen.GestionUsuario.servicio;
 
 import jakarta.ejb.LocalBean;
 import jakarta.ejb.Stateless;
-import org.TopAlmacen.Almacen.GestionPersona.dao.Impl.ImplGestionPersona;
-import org.TopAlmacen.Almacen.GestionPersona.dao.daoGestionPersona;
-import org.TopAlmacen.Almacen.GestionPersona.model.Persona;
+import org.TopAlmacen.Almacen.GestionUsuario.dao.Impl.ImplGestionPersona;
+import org.TopAlmacen.Almacen.GestionUsuario.dao.daoGestionPersona;
+import org.TopAlmacen.Almacen.GestionUsuario.model.Persona;
 
 import java.io.Serializable;
 import java.sql.SQLException;

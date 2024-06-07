@@ -1,7 +1,6 @@
 package org.TopAlmacen.Almacen.GestionUsuario.dao.Impl;
 
-import org.TopAlmacen.Almacen.GestionPersona.dao.Impl.ImplGestionPersona;
-import org.TopAlmacen.Almacen.GestionPersona.dao.daoGestionPersona;
+import org.TopAlmacen.Almacen.GestionUsuario.dao.daoGestionPersona;
 import org.TopAlmacen.Almacen.GestionRol.dao.daoGestionRol;
 import org.TopAlmacen.Almacen.GestionRol.dao.impl.ImplGestionRol;
 import org.TopAlmacen.Almacen.GestionUsuario.dao.daoGestionUsuario;
@@ -113,5 +112,24 @@ public class ImplGestionUsuario implements daoGestionUsuario {
             con.cerrar();
         }
         return lst;
+    }
+
+    @Override
+    public boolean verificadorUsuario(Usuario usuario) throws SQLException {
+        try{
+            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT correo, contrasenia\n" +
+                    "\tFROM public.usuario where correo =?  and contrasenia=? ;");
+            ps.setString(1, usuario.getCorreo());
+            ps.setString(2, usuario.getContrasenia());
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                return true;
+            }
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
+        return false;
     }
 }

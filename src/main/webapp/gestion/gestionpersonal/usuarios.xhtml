@@ -12,6 +12,7 @@
     <h:outputStylesheet library="css" name="StylerPanels.css"/>
 </h:head>
 <h:body styleClass="contendor-panel" >
+    <h:outputStylesheet  library="js"  name="JavaScript.js" />
     <h:form  id="form">
         <p:growl id="messages" showDetail="true" />
         <p:panel styleClass="card-informacion">
@@ -76,6 +77,27 @@
             <p:outputPanel id="userdialog-content" styleClass="ui-fluid dialogs-barra"  >
                 <p:accordionPanel multiple="true" >
                     <p:tab title="Datos Personales ">
+
+                        <h:panelGrid columns="2" width="100%">
+                            <h:panelGrid width="95%">
+                                <p:photoCam widgetVar="pc" listener="#{serviciotest.oncapture}" update="photo"/>
+                                <label>
+                                    <select onchange="reload()" class="photoCamDevices">
+                                        <option value="">Select device</option>
+                                        <option value="user">"user" device</option>
+                                        <option value="environment">"environment" device</option>
+                                    </select>
+                                </label>
+                            </h:panelGrid>
+                            <h:panelGrid  width="95%">
+
+                            </h:panelGrid>
+                        </h:panelGrid><br/>
+
+
+
+
+
                         <h:panelGrid columns="2" width="100%">
                             <h:panelGrid width="95%">
                                     <p:outputLabel for="pnombre" value="Primer Nombre" />

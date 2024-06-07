@@ -33,4 +33,7 @@ public class ServicioGestionUsuario implements Serializable {
         dao.actualizar(u);
     }
 
+    public boolean VerificiarUsuario(Usuario u) throws SQLException {
+        return  dao.verificadorUsuario(u);
+    }
 }

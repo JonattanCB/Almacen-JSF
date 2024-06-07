@@ -5,5 +5,6 @@
                                   https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_3_0.xsd">
     <application>
         <resource-handler>org.omnifaces.resourcehandler.CombinedResourceHandler</resource-handler>
+
     </application>
 </faces-config>

@@ -26,10 +26,10 @@
 					</h:panelGrid>
 					<h:panelGrid styleClass="container-inputs">
 						<p:growl id="growl" showDetail="true" sticky="true" />
-						<p:inputText placeholder="Correo" styleClass="correo" />
-						<p:password toggleMask="true" redisplay="true"
+						<p:inputText value="#{beansGestionUsuario.usuarioIngresado.correo}" placeholder="Correo" styleClass="correo" />
+						<p:password value="#{beansGestionUsuario.usuarioIngresado.contrasenia}" toggleMask="true" redisplay="true"
 							placeholder="Contraseña" styleClass="correo" />
-						<p:commandButton value="Iniciar Sesion"  styleClass="button"  action="gestion/dasboard"
+						<p:commandButton value="Iniciar Sesion"  styleClass="button"  action="#{beansGestionUsuario.login()}"
 							update="myform" />
 					</h:panelGrid>
 				</h:panelGrid>

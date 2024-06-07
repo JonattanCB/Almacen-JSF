@@ -5,8 +5,8 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Data;
-import org.TopAlmacen.Almacen.GestionPersona.Servicio.ServicioPersona;
-import org.TopAlmacen.Almacen.GestionPersona.model.Persona;
+import org.TopAlmacen.Almacen.GestionUsuario.servicio.ServicioPersona;
+import org.TopAlmacen.Almacen.GestionUsuario.model.Persona;
 import org.TopAlmacen.Almacen.GestionRol.model.Rol;
 import org.TopAlmacen.Almacen.GestionRol.servicio.ServicioGestionRol;
 import org.TopAlmacen.Almacen.GestionTipoDocumento.model.TipoDocumento;
@@ -14,15 +14,16 @@ import org.TopAlmacen.Almacen.GestionTipoDocumento.servicio.ServicioTipoDocument
 import org.TopAlmacen.Almacen.GestionUsuario.model.Usuario;
 import org.TopAlmacen.Almacen.GestionUsuario.servicio.ServicioGestionUsuario;
 import org.primefaces.PrimeFaces;
+import org.primefaces.model.file.UploadedFile;
 import org.primefaces.util.LangUtils;
 
 import java.io.Serializable;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 @Named
 @SessionScoped
@@ -42,25 +43,47 @@ public class BeansGestionUsuario implements Serializable {
     @Inject
     private ServicioGestionRol servicioGestionRol;
 
+    /*  =================================================================== */
+    /*  ================================== Listas  ======================== */
 
     private List<Usuario> lstTabla;
     private List<Usuario> lstTablaSeleccionada;
     private List<TipoDocumento> lstTipoDocumento;
     private List<Rol> lstRol;
+
+    /*  ================================================================== */
+    /*  ================================== Variables  ==================== */
     private int selectedTipoDocumento;
     private int selectedRol;
     private int idSeleccionadaUsuario;
     private Persona persona;
     private Usuario usuario;
+    private Usuario usuarioIngresado;
 
+    /*  ====================================================================== */
+    /*  ================================== Inicializador  ==================== */
     @PostConstruct
     private  void init(){
         try{
+            usuarioIngresado = new Usuario();
             lstTabla = servicioGestionUsuario.listaUsuario();
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
 
+    }
+    /*  ================================================================= */
+    /*  ================================== Metodos  ==================== */
+
+    public String login() throws SQLException {
+        String contraMD5 = MD5(usuarioIngresado.getContrasenia());
+        usuarioIngresado.setContrasenia(contraMD5);
+        if (servicioGestionUsuario.VerificiarUsuario(usuarioIngresado)){
+            return "gestion/dasboard";
+        }else {
+            usuarioIngresado = new Usuario();
+            return "index";
+        }
     }
 
     public void abrirUsuario() throws SQLException {
@@ -73,21 +96,9 @@ public class BeansGestionUsuario implements Serializable {
     }
 
     public void guardarUsuario  () throws SQLException {
-        if (usuario.getId() == 0){
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            persona.setTipoDocumento(servicioTipoDocumento.buscarTipoDocumento(selectedTipoDocumento));
-            persona.setId(servicioPersona.registrarRetornadoID(persona));
-            usuario.setPersonas(persona);
-            usuario.setRol(servicioGestionRol.buscarRol(selectedRol));
-            usuario.setEstado("1");
-            usuario.setCfecha(timestamp);
-            servicioGestionUsuario.registrarUsuario(usuario);
-        }else{
-            persona.setTipoDocumento(servicioTipoDocumento.buscarTipoDocumento(selectedTipoDocumento));
-            servicioPersona.editarPersona(persona);
-            usuario.setRol(servicioGestionRol.buscarRol(selectedRol));
-            servicioGestionUsuario.editarUsuario(usuario);
-        }
+
+
+
         lstTabla = servicioGestionUsuario.listaUsuario();
         PrimeFaces.current().executeScript("PF('userdialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-user");
@@ -130,4 +141,22 @@ public class BeansGestionUsuario implements Serializable {
             return 0;
         }
     }
+    
+    private String MD5(String code){
+        String hastext ="";
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messagedigest = md.digest(code.getBytes());
+            BigInteger no = new BigInteger(1,messagedigest);
+            hastext = no.toString(16);
+            while (hastext.length() < 32){
+                hastext = "0"+hastext;
+            }
+
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
+        return  hastext;
+    }
+    /*  ================================================================== */
 }
