@@ -18,4 +18,5 @@ public class Usuario {
     private Rol rol;
     private String estado;
     private Timestamp Cfecha;
+    private byte[] urlfoto;
 }
