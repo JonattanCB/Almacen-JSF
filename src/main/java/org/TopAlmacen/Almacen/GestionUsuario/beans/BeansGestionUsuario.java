@@ -2,13 +2,10 @@ package org.TopAlmacen.Almacen.GestionUsuario.beans;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
-import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.Data;
 import org.TopAlmacen.Almacen.GestionUsuario.servicio.ServicioPersona;
 import org.TopAlmacen.Almacen.GestionUsuario.model.Persona;
@@ -20,11 +17,8 @@ import org.TopAlmacen.Almacen.GestionUsuario.model.Usuario;
 import org.TopAlmacen.Almacen.GestionUsuario.servicio.ServicioGestionUsuario;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.file.UploadedFile;
 import org.primefaces.util.LangUtils;
-import org.primefaces.util.SerializableSupplier;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -66,6 +60,7 @@ public class BeansGestionUsuario implements Serializable {
     private int selectedTipoDocumento;
     private int selectedRol;
     private int idSeleccionadaUsuario;
+    private byte[] foto;
     private String urlFoto;
     private Persona persona;
     private Usuario usuario;
@@ -78,7 +73,7 @@ public class BeansGestionUsuario implements Serializable {
         try{
             usuarioIngresado = new Usuario();
             lstTabla = servicioGestionUsuario.listaUsuario();
-            urlFoto = "/resources/imagenes/usuario/default.png";
+            urlFoto = "/resources/imagenes/usuario/default.png"+"?ts=" + System.currentTimeMillis();;
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
@@ -98,8 +93,24 @@ public class BeansGestionUsuario implements Serializable {
         }
     }
 
+    public String irUsuario() throws SQLException {
+        lstTabla = servicioGestionUsuario.listaUsuario();
+        return "gestionpersonal/usuarios";
+    }
+
     public void seleccionarFoto(FileUploadEvent event) {
-        urlFoto = foto(event.getFile());
+        urlFoto = Seleccion_foto(event.getFile());
+    }
+
+    public void abrirNuevoUsuario() throws SQLException {
+        this.urlFoto = "/resources/imagenes/usuario/default.png";
+        this.foto = null;
+        this.selectedTipoDocumento = 0;
+        this.selectedRol = 0;
+        this.persona = new Persona();
+        this.usuario = new Usuario();
+        this.lstTipoDocumento = servicioTipoDocumento.listaTipoDocumento();
+        this.lstRol = servicioGestionRol.listarRol();
     }
 
     public void abrirUsuario() throws SQLException {
@@ -109,7 +120,8 @@ public class BeansGestionUsuario implements Serializable {
         this.persona = usuario.getPersonas();
         this.selectedTipoDocumento = persona.getTipoDocumento().getId();
         this.selectedRol = usuario.getRol().getId();
-        this.urlFoto = usuario.getUrlfoto();
+        this.foto = usuario.getUrlfoto();
+        descargaImagen(String.valueOf(usuario.getId()));
     }
 
     public void guardarUsuario() throws SQLException {
@@ -122,32 +134,23 @@ public class BeansGestionUsuario implements Serializable {
             usuario.setContrasenia(MD5(usuario.getContrasenia()));
             usuario.setEstado("1");
             usuario.setCfecha(timestamp);
-            usuario.setUrlfoto(urlFoto);
+            usuario.setUrlfoto(foto);
             servicioGestionUsuario.registrarUsuario(usuario);
+            eliminarArchivo(urlFoto);
         }else{
             persona.setTipoDocumento(servicioTipoDocumento.buscarTipoDocumento(selectedTipoDocumento));
             servicioPersona.editarPersona(persona);
             usuario.setRol(servicioGestionRol.buscarRol(selectedRol));
+            usuario.setUrlfoto(foto);
             servicioGestionUsuario.editarUsuario(usuario);
+            eliminarArchivo(urlFoto);
         }
+        urlFoto="";
+        foto = null;
         lstTabla = servicioGestionUsuario.listaUsuario();
         PrimeFaces.current().executeScript("PF('userdialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-user");
-    }
-
-    public String irUsuario() throws SQLException {
-        lstTabla = servicioGestionUsuario.listaUsuario();
-        return "gestionpersonal/usuarios";
-    }
-
-    public void abrirNuevoUsuario() throws SQLException {
-        this.urlFoto = "/resources/imagenes/usuario/default.png";
-        this.selectedTipoDocumento = 0;
-        this.selectedRol = 0;
-        this.persona = new Persona();
-        this.usuario = new Usuario();
-        this.lstTipoDocumento = servicioTipoDocumento.listaTipoDocumento();
-        this.lstRol = servicioGestionRol.listarRol();
+        System.out.println("esta es la url princiap: "+urlFoto);
     }
 
     public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
@@ -168,25 +171,64 @@ public class BeansGestionUsuario implements Serializable {
     /*  =========================== Extensiones  ========================= */
     /*  ================================================================== */
 
-    private String foto(UploadedFile uploadedFile) {
-
+    private void descargaImagen(String nombre){
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String fileName = nombre+".png" ;
+        String urlPatch= externalContext.getRealPath("") + File.separator + "resources" + File.separator + "imagenes"
+                + File.separator + "usuario" +File.separator+ fileName;
+        File file = new File(urlPatch);
+        file.getParentFile().mkdirs();
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(foto);
+            urlFoto = "/resources/imagenes/usuario/" + fileName+"?ts=" + System.currentTimeMillis();
+            System.out.println("datos ver: "+urlFoto);
+        } catch (IOException e) {
+            System.out.println("Error al guardar el archivo: " + e.getMessage());
+        }
     }
 
-
-    private String UrlData(){
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        ExternalContext externalContext = facesContext.getExternalContext();
-        String rutaBase = externalContext.getRealPath("");
-        int lastIndex = rutaBase.lastIndexOf(File.separator);
-        while (lastIndex != -1) {
-            String subruta = rutaBase.substring(0, lastIndex);
-            if (subruta.endsWith(File.separator + "standalone")) {
-                rutaBase = subruta;
-                break;
-            }
-            lastIndex = subruta.lastIndexOf(File.separator);
+    private String Seleccion_foto(UploadedFile uploadedFile) {
+        String url = "";
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String originalFileName = uploadedFile.getFileName();
+        String extension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
+        String fileName = UUID.randomUUID().toString() + "." + extension;
+        String lastfinalName = urlFoto;
+        String urlPatch= externalContext.getRealPath("") + File.separator + "resources" + File.separator + "imagenes"
+                + File.separator + "usuario" +File.separator+ fileName;
+        if (lastfinalName != null && !lastfinalName.equals("/resources/imagenes/usuario/default.png?ts="+ System.currentTimeMillis())){
+            eliminarArchivo(urlFoto);
         }
-        return rutaBase+File.separator+"data";
+        try (InputStream in = uploadedFile.getInputStream();
+             ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             OutputStream out = new FileOutputStream(urlPatch)) {
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+                baos.write(buffer, 0, bytesRead);
+            }
+            foto = baos.toByteArray();
+            url = "/resources/imagenes/usuario/"+fileName;
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return url;
+    }
+
+    private boolean eliminarArchivo(String fileName) {
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String urlPatch = externalContext.getRealPath("") + File.separator + fileName;
+        File file = new File(urlPatch);
+        if (file.exists()) {
+            if (file.delete()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     private int getInteger(String string) {

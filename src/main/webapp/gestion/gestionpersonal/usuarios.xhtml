@@ -79,7 +79,7 @@
                     <p:tab title="Datos Personales ">
                         <h:panelGrid width="100%" style="text-align: center">
                             <h:panelGrid width="97%" id="subir_archivos">
-                                <h:graphicImage  value="#{beansGestionUsuario.urlFoto}"  id="imageComponent" />
+                                <h:graphicImage  value="#{beansGestionUsuario.urlFoto}"  id="imageComponent" style="width: 100px; height: 100px"/>
                                 <p:outputLabel for="foto" value="Seleccione la foto" />
                                 <p:fileUpload id="foto" listener="#{beansGestionUsuario.seleccionarFoto}" mode="simple" skinSimple="true"
                                               auto="true" update="subir_archivos imageComponent"/>
