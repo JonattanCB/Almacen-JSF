@@ -94,7 +94,6 @@ public class BeansGestionTipoDocumento implements Serializable {
 
     public void cambiaEstado() throws SQLException {
         tipoDocumento = servicioTipoDocumento.buscarTipoDocumento(ID_TipoDocumento);
-        System.out.println(tipoDocumento.getEstado());
         switch (tipoDocumento.getEstado()){
             case "Activo":
                 tipoDocumento.setEstado("Inactivo");

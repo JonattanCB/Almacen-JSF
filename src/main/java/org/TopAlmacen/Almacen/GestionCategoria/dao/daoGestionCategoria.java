@@ -5,7 +5,12 @@ import jakarta.ejb.Stateless;
 import org.TopAlmacen.Almacen.Dao.Crud;
 import org.TopAlmacen.Almacen.GestionCategoria.model.Categoria;
 
+import java.sql.SQLException;
+
 @Stateless
 @LocalBean
 public interface daoGestionCategoria  extends Crud<Categoria> {
+
+    void CambiarEstado(Categoria categoria) throws SQLException;
+
 }

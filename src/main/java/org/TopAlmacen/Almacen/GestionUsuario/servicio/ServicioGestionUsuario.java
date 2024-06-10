@@ -14,7 +14,11 @@ import java.util.List;
 @LocalBean
 public class ServicioGestionUsuario implements Serializable {
 
-    private final daoGestionUsuario dao = new ImplGestionUsuario();
+    private final daoGestionUsuario dao;
+
+    public ServicioGestionUsuario() {
+        dao = new ImplGestionUsuario();
+    }
 
     public List<Usuario> listaUsuario() throws SQLException {
         List<Usuario> lst = dao.buscarTodos();
@@ -36,4 +40,9 @@ public class ServicioGestionUsuario implements Serializable {
     public boolean VerificiarUsuario(Usuario u) throws SQLException {
         return  dao.verificadorUsuario(u);
     }
+
+    public void CambiarEstado(Usuario u) throws  SQLException{
+        dao.cambiarEstado(u);
+    }
+
 }

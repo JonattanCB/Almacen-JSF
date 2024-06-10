@@ -2,6 +2,7 @@ package org.TopAlmacen.Almacen.GestionUsuario.beans;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
@@ -62,6 +63,8 @@ public class BeansGestionUsuario implements Serializable {
     private int idSeleccionadaUsuario;
     private byte[] foto;
     private boolean activarvistaUsuario;
+    private boolean activarUsuarioDatos;
+    private boolean activeNewButton;
     private String urlFoto;
     private Persona persona;
     private Usuario usuario;
@@ -70,12 +73,14 @@ public class BeansGestionUsuario implements Serializable {
     /*  ====================================================================== */
     /*  ================================== Inicializador  ==================== */
     @PostConstruct
-    private  void init(){
+    public void init(){
         try{
             usuarioIngresado = new Usuario();
             lstTabla = servicioGestionUsuario.listaUsuario();
             urlFoto = "/resources/imagenes/usuario/default.png"+"?ts=" + System.currentTimeMillis();
-            activarvistaUsuario = false;
+            activarvistaUsuario = true;
+            activarUsuarioDatos=false;
+            verificarusoNuevoUsuario();
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
@@ -97,7 +102,9 @@ public class BeansGestionUsuario implements Serializable {
 
     public String irUsuario() throws SQLException {
         lstTabla = servicioGestionUsuario.listaUsuario();
-        activarvistaUsuario = false;
+        activarvistaUsuario = true;
+        activarUsuarioDatos=false;
+        verificarusoNuevoUsuario();
         return "gestionpersonal/usuarios";
     }
 
@@ -112,32 +119,52 @@ public class BeansGestionUsuario implements Serializable {
         this.selectedRol = 0;
         this.persona = new Persona();
         this.usuario = new Usuario();
-        this.lstTipoDocumento = servicioTipoDocumento.listaTipoDocumento();
-        this.lstRol = servicioGestionRol.listarRol();
-        activarvistaUsuario = false;
+        this.lstTipoDocumento = servicioTipoDocumento.listarTDocumentoActivo();
+        this.lstRol = servicioGestionRol.listRolActivo();
+        activarvistaUsuario = true;
+        activarUsuarioDatos=false;
+        verificarusoNuevoUsuario();
     }
 
     public void abrirUsuario() throws SQLException {
-        this.lstTipoDocumento = servicioTipoDocumento.listaTipoDocumento();
-        this.lstRol = servicioGestionRol.listarRol();
         this.usuario = servicioGestionUsuario.buscarUsuario(idSeleccionadaUsuario);
+        this.lstTipoDocumento = listTipoDocumentoActualizado(usuario);
+        this.lstRol = listRolActualizado(usuario);
         this.persona = usuario.getPersonas();
         this.selectedTipoDocumento = persona.getTipoDocumento().getId();
         this.selectedRol = usuario.getRol().getId();
         this.foto = usuario.getUrlfoto();
         descargaImagen(String.valueOf(usuario.getId()));
-        activarvistaUsuario =false;
+        activarvistaUsuario =true;
+        activarUsuarioDatos= false;
+        verificarusoNuevoUsuario();
     }
 
-    public void abrirVistaUsuario(){
-        activarvistaUsuario = true;
-
-        System.out.println("abrir vista usuario:"+activarvistaUsuario);
-
+    public void abrirVistaUsuario() throws SQLException {
+        activarvistaUsuario = false;
+        activarUsuarioDatos = true;
+        this.usuario = servicioGestionUsuario.buscarUsuario(idSeleccionadaUsuario);
+        this.foto = usuario.getUrlfoto();
+        descargaImagen(String.valueOf(usuario.getId()));
+        verificarusoNuevoUsuario();
     }
 
-    public void CambiarEstado(){
-        System.out.println("cambia estado");
+    public void CambiarEstado() throws SQLException {
+        usuario = servicioGestionUsuario.buscarUsuario(idSeleccionadaUsuario);
+        switch (usuario.getEstado()){
+            case "Activo":
+                usuario.setEstado("Inactivo");
+                break;
+            case "Inactivo":
+                usuario.setEstado("Activo");
+                break;
+        }
+        String nombreCompleto = usuario.getPersonas().getPnombre() +" "+usuario.getPersonas().getSnombre() +" "+usuario.getPersonas().getApatero() +" "+usuario.getPersonas().getAmatero();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El estado del usuario "+nombreCompleto+" ha cambiado a "+usuario.getEstado()+"!"));
+        servicioGestionUsuario.CambiarEstado(usuario);
+        lstTabla = servicioGestionUsuario.listaUsuario();
+        PrimeFaces.current().executeScript("PF('userdialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-user");
     }
 
     public void guardarUsuario() throws SQLException {
@@ -148,11 +175,13 @@ public class BeansGestionUsuario implements Serializable {
             usuario.setPersonas(persona);
             usuario.setRol(servicioGestionRol.buscarRol(selectedRol));
             usuario.setContrasenia(MD5(usuario.getContrasenia()));
-            usuario.setEstado("1");
+            usuario.setEstado("Activo");
             usuario.setCfecha(timestamp);
             usuario.setUrlfoto(foto);
             servicioGestionUsuario.registrarUsuario(usuario);
             eliminarArchivo(urlFoto);
+            String nombreCompleto = usuario.getPersonas().getPnombre() +" "+usuario.getPersonas().getSnombre() +" "+usuario.getPersonas().getApatero() +" "+usuario.getPersonas().getAmatero();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El usuario "+nombreCompleto+" ha sido registrado exitosamente en el sistema!"));
         }else{
             persona.setTipoDocumento(servicioTipoDocumento.buscarTipoDocumento(selectedTipoDocumento));
             servicioPersona.editarPersona(persona);
@@ -160,15 +189,18 @@ public class BeansGestionUsuario implements Serializable {
             usuario.setUrlfoto(foto);
             servicioGestionUsuario.editarUsuario(usuario);
             eliminarArchivo(urlFoto);
+            String nombreCompleto = usuario.getPersonas().getPnombre() +" "+usuario.getPersonas().getSnombre() +" "+usuario.getPersonas().getApatero() +" "+usuario.getPersonas().getAmatero();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El usuario "+nombreCompleto+" ha sido actualizado exitosamente en el sistema!"));
         }
         idSeleccionadaUsuario = 0;
-        activarvistaUsuario =false;
+        activarvistaUsuario =true;
+        activarUsuarioDatos=false;
         urlFoto="";
         foto = null;
         lstTabla = servicioGestionUsuario.listaUsuario();
+        verificarusoNuevoUsuario();
         PrimeFaces.current().executeScript("PF('userdialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-user");
-        System.out.println("esta es la url princiap: "+urlFoto);
     }
 
     public boolean globalFilterFunction(Object value, Object filter, Locale locale) {
@@ -176,7 +208,6 @@ public class BeansGestionUsuario implements Serializable {
         if (LangUtils.isValueBlank(filterText)) {
             return true;
         }
-        System.out.println(filterText);
         int filterInt = getInteger(filterText);
         Usuario u = (Usuario) value;
         return  (u.getId()>=filterInt && u.getId()<=filterInt) ||
@@ -199,7 +230,6 @@ public class BeansGestionUsuario implements Serializable {
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(foto);
             urlFoto = "/resources/imagenes/usuario/" + fileName+"?ts=" + System.currentTimeMillis();
-            System.out.println("datos ver: "+urlFoto);
         } catch (IOException e) {
             System.out.println("Error al guardar el archivo: " + e.getMessage());
         }
@@ -275,6 +305,31 @@ public class BeansGestionUsuario implements Serializable {
         return  hastext;
     }
 
+    private List<TipoDocumento> listTipoDocumentoActualizado(Usuario usuario) throws SQLException {
+        List<TipoDocumento> lst = servicioTipoDocumento.listarTDocumentoActivo();
+        if (usuario.getPersonas().getTipoDocumento().getEstado().equals("Inactivo")){
+            lst.add(usuario.getPersonas().getTipoDocumento());
+        }
+        return  lst;
+    }
+
+    private List<Rol> listRolActualizado(Usuario usuario) throws  SQLException{
+        List<Rol> lst = servicioGestionRol.listRolActivo();
+        if (usuario.getRol().getEstado().equals("Inactivo")){
+            lst.add(usuario.getRol());
+        }
+        return  lst;
+    }
+
+    private void verificarusoNuevoUsuario() throws SQLException {
+        List<TipoDocumento> listtd = servicioTipoDocumento.listarTDocumentoActivo();
+        List<Rol> listrol = servicioGestionRol.listRolActivo();
+        if (listtd == null || listtd.isEmpty() || listrol == null || listrol.isEmpty()){
+            activeNewButton= true;
+        }else{
+            activeNewButton= false;
+        }
+    }
 
     /*  ================================================================== */
 }

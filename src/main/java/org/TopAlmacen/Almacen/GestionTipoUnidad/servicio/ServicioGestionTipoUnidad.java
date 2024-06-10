@@ -14,7 +14,11 @@ import java.util.List;
 @LocalBean
 public class ServicioGestionTipoUnidad implements Serializable {
 
-    private final daoGestionTipoUnidad dao = new ImplGestionTipoUnidad();
+    private final daoGestionTipoUnidad dao;
+
+    public ServicioGestionTipoUnidad() {
+        dao = new ImplGestionTipoUnidad();
+    }
 
     public List<TipoUnidad> lstTipoUnidad() throws SQLException {
         return  dao.buscarTodos();
@@ -30,6 +34,10 @@ public class ServicioGestionTipoUnidad implements Serializable {
 
     public TipoUnidad buscar(int id) throws SQLException {
         return dao.buscar(id);
+    }
+
+    public  void CambiarEstado(TipoUnidad tipoUnidad) throws SQLException{
+        dao.cambiarestado(tipoUnidad);
     }
 
 }

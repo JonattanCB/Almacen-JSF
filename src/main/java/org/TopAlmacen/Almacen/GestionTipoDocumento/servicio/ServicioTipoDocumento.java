@@ -40,4 +40,8 @@ public class ServicioTipoDocumento implements Serializable {
         dao.CambiarEstado(td);
     }
 
+    public List<TipoDocumento> listarTDocumentoActivo() throws SQLException {
+        return dao.listarTDocumentoActivo();
+    }
+
 }

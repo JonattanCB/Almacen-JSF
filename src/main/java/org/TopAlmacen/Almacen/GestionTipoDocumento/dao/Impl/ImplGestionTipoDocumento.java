@@ -122,4 +122,28 @@ public class ImplGestionTipoDocumento implements daoGestionTipoDocumento {
             con.cerrar();
         }
     }
+
+    @Override
+    public List<TipoDocumento> listarTDocumentoActivo() throws SQLException {
+        List<TipoDocumento> lst = new ArrayList<>();
+        try {
+            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, nombre, descripcion, estado, \"CFecha\"\n" +
+                    "\tFROM public.tipodocumento where estado ='Activo' order by id asc;");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                TipoDocumento td = new TipoDocumento();
+                td.setId(rs.getInt(1));
+                td.setNombre(rs.getString(2));
+                td.setDescripcion(rs.getString(3));
+                td.setEstado(rs.getString(4));
+                td.setCfecha(rs.getTimestamp(5));
+                lst.add(td);
+            }
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
+        return  lst;
+    }
 }

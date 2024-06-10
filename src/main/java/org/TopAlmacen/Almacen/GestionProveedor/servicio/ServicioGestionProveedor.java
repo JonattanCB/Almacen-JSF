@@ -35,4 +35,12 @@ public class ServicioGestionProveedor implements Serializable {
         dao.actualizar(proveedor);
     }
 
+    public void CambioEstado(Proveedor proveedor) throws  SQLException{
+        dao.CambioEstado(proveedor);
+    }
+
+    public List<Proveedor> lstProveedorActivo() throws  SQLException{
+        return  dao.lstProveedorActivo();
+    }
+
 }

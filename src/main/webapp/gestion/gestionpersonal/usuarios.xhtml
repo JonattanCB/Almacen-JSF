@@ -21,7 +21,7 @@
             <p:toolbar style="height: 25%">
                 <p:toolbarGroup>
                     <p:commandButton value="Nuevo Usuario" icon="pi pi-plus" actionListener="#{beansGestionUsuario.abrirNuevoUsuario}"
-                                     update=":dialogs:userdialog-content" oncomplete="PF('userdialog').show()"
+                                     update=":dialogs" oncomplete="PF('userdialog').show()" disabled="#{beansGestionUsuario.activeNewButton}"
                                      styleClass="nuevo-button ui-button-success">
                         <p:resetInput target=":dialogs:userdialog-content" />
                     </p:commandButton>
@@ -58,15 +58,13 @@
                     <h:outputText value="#{user.estado}"
                                   styleClass="columnas-texto-table customer-badge status-#{user.estado}"/>
                 </p:column>
-
                 <p:column headerText="Acciones"  width="80">
-                    <p:commandButton icon="pi pi-book" update=":dialogs:userdialog-content"
+                    <p:commandButton icon="pi pi-book" update=":dialogs"
                                      oncomplete="PF('userdialog').show()" action="#{beansGestionUsuario.abrirVistaUsuario()}"
                                      styleClass="edit-button rounded-button ui-button-info" process="@this">
                         <f:setPropertyActionListener value="#{user.id}" target="#{beansGestionUsuario.idSeleccionadaUsuario}" />
                     </p:commandButton> |
-
-                    <p:commandButton icon="pi pi-pencil" update=":dialogs:userdialog-content"
+                    <p:commandButton icon="pi pi-pencil" update=":dialogs"
                                      oncomplete="PF('userdialog').show()" action="#{beansGestionUsuario.abrirUsuario()}"
                                      styleClass="edit-button rounded-button ui-button-success" process="@this">
                         <f:setPropertyActionListener value="#{user.id}" target="#{beansGestionUsuario.idSeleccionadaUsuario}" />
@@ -90,49 +88,57 @@
                                 <h:graphicImage  value="#{beansGestionUsuario.urlFoto}"  id="imageComponent" style="width: 100px; height: 100px"/>
                                 <p:outputLabel for="foto" value="Seleccione la foto" />
                                 <p:fileUpload id="foto" listener="#{beansGestionUsuario.seleccionarFoto}" mode="simple" skinSimple="true"
-                                              auto="true" update="subir_archivos imageComponent"/>
+                                              auto="true" update="subir_archivos imageComponent" rendered="#{beansGestionUsuario.activarvistaUsuario}"/>
                             </h:panelGrid>
                         </h:panelGrid><br/>
                         <h:panelGrid columns="2" width="100%">
                             <h:panelGrid width="95%">
                                     <p:outputLabel for="pnombre" value="Primer Nombre" />
-                                    <p:inputText  value="#{beansGestionUsuario.persona.pnombre}"  id="pnombre" required="true" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.pnombre}"  id="pnombre" required="true" rendered="#{beansGestionUsuario.activarvistaUsuario}"/>
+                                    <p:outputLabel value="#{beansGestionUsuario.usuario.personas.pnombre}" required="true" rendered="#{beansGestionUsuario.activarUsuarioDatos}"/>
                             </h:panelGrid>
                             <h:panelGrid  width="95%">
                                     <p:outputLabel for="snombre" value="Segundo Nombre" />
-                                    <p:inputText  value="#{beansGestionUsuario.persona.snombre}"  id="snombre" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.snombre}"  id="snombre" rendered="#{beansGestionUsuario.activarvistaUsuario}" />
+                                    <p:outputLabel  value="#{beansGestionUsuario.usuario.personas.snombre}"  required="true" rendered="#{beansGestionUsuario.activarUsuarioDatos}"/>
                             </h:panelGrid>
                         </h:panelGrid><br/>
                         <h:panelGrid columns="2" width="100%">
                             <h:panelGrid width="95%" >
                                     <p:outputLabel for="apaterno" value="Apellido Paterno" />
-                                    <p:inputText  value="#{beansGestionUsuario.persona.apatero}"   id="apaterno" required="true" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.apatero}"   id="apaterno" required="true" rendered="#{beansGestionUsuario.activarvistaUsuario}" />
+                                    <p:outputLabel value="#{beansGestionUsuario.usuario.personas.apatero}"  required="true" rendered="#{beansGestionUsuario.activarUsuarioDatos}"  />
                             </h:panelGrid>
                             <h:panelGrid width="95%">
                                     <p:outputLabel for="amaterno" value="Apellido Materno" />
-                                    <p:inputText  value="#{beansGestionUsuario.persona.amatero}"  id="amaterno" required="true" />
+                                    <p:inputText  value="#{beansGestionUsuario.persona.amatero}"  id="amaterno" required="true" rendered="#{beansGestionUsuario.activarvistaUsuario}" />
+                                    <p:outputLabel value="#{beansGestionUsuario.usuario.personas.amatero}" required="true" rendered="#{beansGestionUsuario.activarUsuarioDatos}" />
                             </h:panelGrid>
                         </h:panelGrid><br/>
                         <h:panelGrid columns="2" width="100%">
                             <h:panelGrid width="95%" >
                                     <p:outputLabel for="tdocumento"  value="Tipo de Documento" style="width: 300px"/>
-                                    <p:selectOneMenu id="tdocumento"  styleClass="ui-selectonemenu"  value="#{beansGestionUsuario.selectedTipoDocumento}" required="true" style="width:100%" autoWidth="false" >
+                                    <p:selectOneMenu id="tdocumento"  styleClass="ui-selectonemenu"  value="#{beansGestionUsuario.selectedTipoDocumento}" required="true" style="width:100%" autoWidth="false" rendered="#{beansGestionUsuario.activarvistaUsuario}" >
                                         <f:selectItem  noSelectionOption="true" itemLabel="Seleccionar Opcion"  />
                                         <f:selectItems  value="#{beansGestionUsuario.lstTipoDocumento}" var="td" itemLabel="#{td.nombre}" itemValue="#{td.id}"  />
                                     </p:selectOneMenu>
+                                    <p:outputLabel  value="#{beansGestionUsuario.usuario.personas.tipoDocumento.nombre}"  required="true" rendered="#{beansGestionUsuario.activarUsuarioDatos}" />
                             </h:panelGrid>
                             <h:panelGrid width="95%" >
                                     <p:outputLabel for="ndocumento" value="Numero de Documento" />
-                                    <p:inputText type="number"  value="#{beansGestionUsuario.persona.ndocumento}"  id="ndocumento" required="true" />
+                                    <p:inputText type="number"  value="#{beansGestionUsuario.persona.ndocumento}"  id="ndocumento" required="true" rendered="#{beansGestionUsuario.activarvistaUsuario}"  />
+                                    <p:outputLabel  value="#{beansGestionUsuario.usuario.personas.ndocumento}" required="true" rendered="#{beansGestionUsuario.activarUsuarioDatos}" />
                             </h:panelGrid>
                         </h:panelGrid><br/>
                         <h:panelGrid width="97%">
                             <p:outputLabel for="direccion" value="Direccion" />
-                            <p:inputText id="direccion"  value="#{beansGestionUsuario.persona.direccion}" required="true" />
+                            <p:inputText id="direccion"  value="#{beansGestionUsuario.persona.direccion}" required="true" rendered="#{beansGestionUsuario.activarvistaUsuario}"  />
+                            <p:outputLabel value="#{beansGestionUsuario.usuario.personas.direccion}"  required="true" rendered="#{beansGestionUsuario.activarUsuarioDatos}"  />
                         </h:panelGrid><br/>
                         <h:panelGrid width="97%">
                             <p:outputLabel for="telefono" value="Telefono" />
-                            <p:inputText id="telefono" type="number"  value="#{beansGestionUsuario.persona.telefono}" required="true" />
+                            <p:inputText id="telefono" type="number"  value="#{beansGestionUsuario.persona.telefono}" required="true" rendered="#{beansGestionUsuario.activarvistaUsuario}" />
+                            <p:outputLabel value="#{beansGestionUsuario.usuario.personas.telefono}" required="true" rendered="#{beansGestionUsuario.activarUsuarioDatos}" />
                         </h:panelGrid><br/>
                     </p:tab>
                 </p:accordionPanel><br/>
@@ -143,16 +149,18 @@
                                 <p:outputLabel for="rol" value="Rol Encargado" />
                             </h:panelGrid>
                             <h:panelGrid  width="500">
-                                <p:selectOneMenu  id="rol" value="#{beansGestionUsuario.selectedRol}" styleClass="ui-selectonemenu" required="true" style="width: 100%" autoWidth="false"  >
+                                <p:selectOneMenu  id="rol" value="#{beansGestionUsuario.selectedRol}" styleClass="ui-selectonemenu" required="true" style="width: 100%" autoWidth="false" rendered="#{beansGestionUsuario.activarvistaUsuario}"   >
                                     <f:selectItem noSelectionOption="true" itemLabel="Selecionar Opcion" />
                                     <f:selectItems  value="#{beansGestionUsuario.lstRol}" var="rol" itemLabel="#{rol.nombre}" itemValue="#{rol.id}" itemDescription="#{rol.descripcion}"/>
                                 </p:selectOneMenu>
+                                <p:outputLabel value="#{beansGestionUsuario.usuario.rol.nombre}" required="true" rendered="#{beansGestionUsuario.activarUsuarioDatos}" />
                             </h:panelGrid>
                         </h:panelGrid><br/>
                         <h:panelGrid columns="2" width="100%">
                             <h:panelGrid width="95%">
                                 <p:outputLabel for="correo" value="Correo" />
-                                <p:inputText  value="#{beansGestionUsuario.usuario.correo}"  id="correo" required="true" />
+                                <p:inputText  value="#{beansGestionUsuario.usuario.correo}"  id="correo" required="true" rendered="#{beansGestionUsuario.activarvistaUsuario}"  />
+                                <p:outputLabel value="#{beansGestionUsuario.usuario.correo}" rendered="#{beansGestionUsuario.activarUsuarioDatos}"/>
                             </h:panelGrid>
                             <h:panelGrid  width="95%">
                                 <p:outputLabel for="Contrasenia" value="Contraseña" rendered="#{beansGestionUsuario.usuario.id eq 0 }" />
@@ -163,7 +171,7 @@
                 </p:accordionPanel>
             </p:outputPanel>
             <f:facet name="footer">
-                <p:commandButton value="Guardar"  icon="pi pi-check" action="#{beansGestionUsuario.guardarUsuario()}" update="userdialog-content" process="userdialog-content @this" />
+                <p:commandButton value="Guardar"  icon="pi pi-check" action="#{beansGestionUsuario.guardarUsuario()}" update="userdialog-content" process="userdialog-content @this" rendered="#{beansGestionUsuario.activarvistaUsuario}"  />
                 <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('userdialog').hide()"  styleClass="ui-button-secondary" type="button"/>
             </f:facet>
         </p:dialog>

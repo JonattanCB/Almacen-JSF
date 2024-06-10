@@ -103,10 +103,10 @@ public class beansGestionRol implements Serializable {
                break;
        }
        servicioGestionRol.CambiarEstado(rol);
-        lstRol = servicioGestionRol.listarRol();
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El estado del rol ha cambiado a "+rol.getEstado()+"!"));
-        PrimeFaces.current().executeScript("PF('roldialog').hide()");
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-rol");
+       lstRol = servicioGestionRol.listarRol();
+       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El estado del rol ha cambiado a "+rol.getEstado()+"!"));
+       PrimeFaces.current().executeScript("PF('roldialog').hide()");
+       PrimeFaces.current().ajax().update("form:messages", "form:dt-rol");
     }
 
     /*  =========================== Extensiones  ========================= */

@@ -13,58 +13,67 @@
 </h:head>
 <h:body styleClass="contendor-panel" >
     <h:form  id="form">
-        <p:growl id="messages" showDetail="true" />
+        <p:growl id="messages"/>
         <p:panel styleClass="card-informacion">
             <f:facet name="header">
-                <i class="pi pi-sitemap"/> <p:outputLabel value="Listado de Proveedor" styleClass="titulo-card" />
+                <i class="pi pi-th-large"/> <p:outputLabel value="Gestión de proveedor" styleClass="titulo-card"/>
             </f:facet>
-            <p:toolbar>
+            <p:toolbar style="height: 25%">
                 <p:toolbarGroup >
                     <p:commandButton value="Nuevo Proveedor" icon="pi pi-plus" actionListener="#{beansGestionProveedor.NuevoProveedor()}"
-                                     update=":dialogs:dialog-content" oncomplete="PF('dialog').show()"
-                                     styleClass="ui-button-success" style="margin-right: .5rem">
+                                     update=":dialogs" oncomplete="PF('dialog').show()" disabled="#{beansGestionProveedor.activarNuevoEmpresa}"
+                                     styleClass="nuevo-button ui-button-success">
                         <p:resetInput target=":dialogs:dialog-content" />
                     </p:commandButton>
                 </p:toolbarGroup>
-
-            </p:toolbar>
+            </p:toolbar><br/>
             <p:dataTable id="dt" var="proveedor" value="#{beansGestionProveedor.listProveedor}"  widgetVar="proveedor"
-                         emptyMessage="No hay Proveedores Registrados"
+                         emptyMessage="No hay elementos disponibles."
                          filteredValue="#{beansGestionProveedor.selectedlstProveedores}"
                          globalFilterFunction="#{beansGestionProveedor.globalFilterFunction}"
                          rows="10" paginator="true" rowSelectMode="add" paginatorPosition="bottom">
                 <f:facet name="header">
-                    <div class="buscador-table">
-                        <span class="titulo-tabla">PROVEEDORES</span>
+                    <div class="buscador-table" style="height: 20%">
+                        <span class="titulo-tabla">Catálogo de proveedor</span>
                         <span class="filter-container ui-input-icon-left" style="float: right">
                             <i class="pi pi-search"/>
                             <p:inputText id="globalFilter" onkeyup="PF('proveedor').filter()"
-                                         placeholder="Buscar todo los campos" />
+                                         style="font-size: 13px;width: 300px"
+                                         placeholder="Buscar entre los datos de proveedor" />
                         </span>
                     </div>
                 </f:facet>
-                <p:column headerText="#"  >
-                    <h:outputText value="#{proveedor.idProveedor}" />
+                <p:column headerText="#" sortBy="#{proveedor.idProveedor}" width="10" >
+                    <h:outputText value="#{proveedor.idProveedor}" styleClass="columnas-texto-table" />
                 </p:column>
-                <p:column headerText="Nombre" >
-                    <h:outputText value="#{proveedor.nombre}" />
+                <p:column headerText="Nombre" sortBy="#{proveedor.nombre}" width="150" >
+                    <h:outputText value="#{proveedor.nombre}" styleClass="columnas-texto-table" />
                 </p:column>
-                <p:column headerText="Correo" >
-                    <h:outputText value="#{proveedor.correo}" />
+                <p:column headerText="Correo" sortBy="#{proveedor.correo}" width="120" >
+                    <h:outputText value="#{proveedor.correo}" styleClass="columnas-texto-table" />
                 </p:column>
-                <p:column headerText="Telefono" >
-                    <h:outputText value="#{proveedor.telefono}" />
+                <p:column headerText="Telefono"  sortBy="#{proveedor.telefono}" width="150" >
+                    <h:outputText value="#{proveedor.telefono}" styleClass="columnas-texto-table"/>
                 </p:column>
-                <p:column headerText="Acciones">
-                    <p:commandButton icon="pi pi-pencil" update=":dialogs:dialog-content"
+                <p:column headerText="Estado" sortBy="#{proveedor.estado}"  width="70">
+                    <h:outputText value="#{proveedor.estado}"
+                                  styleClass="columnas-texto-table customer-badge status-#{proveedor.estado}"/>
+                </p:column>
+                <p:column headerText="Acciones" width="80">
+                    <p:commandButton icon="pi pi-book" update=":dialogs"
+                                     oncomplete="PF('dialog').show()" action="#{beansGestionProveedor.AbrirProveedorData()}"
+                                     styleClass="edit-button rounded-button ui-button-info" process="@this">
+                        <f:setPropertyActionListener value="#{proveedor.idProveedor}" target="#{beansGestionProveedor.idProveedor}" />
+                    </p:commandButton> |
+                    <p:commandButton icon="pi pi-pencil" update=":dialogs"
                                      oncomplete="PF('dialog').show()" action="#{beansGestionProveedor.Abrirproveedor()}"
                                      styleClass="edit-button rounded-button ui-button-success" process="@this">
                         <f:setPropertyActionListener value="#{proveedor.idProveedor}" target="#{beansGestionProveedor.idProveedor}" />
                     </p:commandButton> |
-                    <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
-                                     process="@this"
-                                     oncomplete="PF('deleterol').show()" >
+                    <p:commandButton class="edit-button ui-button-secondary rounded-button"
+                                     icon="pi pi-arrow-right-arrow-left" action="#{beansGestionProveedor.CambioEstado()}" >
                         <f:setPropertyActionListener value="#{proveedor.idProveedor}" target="#{beansGestionProveedor.idProveedor}" />
+                        <p:confirm header="Confirmacion" message="¿Está seguro de que desea cambiar el estado del proveedor?" icon="pi pi-info-circle"/>
                     </p:commandButton>
                 </p:column>
             </p:dataTable>
@@ -76,11 +85,13 @@
                 <h:panelGrid columns="2" width="100%">
                     <h:panelGrid width="95%">
                         <p:outputLabel for="nombre" value="Nombre" />
-                        <p:inputText  value="#{beansGestionProveedor.proveedor.nombre}"  id="nombre" required="true" />
+                        <p:inputText  value="#{beansGestionProveedor.proveedor.nombre}"  id="nombre" required="true"  rendered="#{beansGestionProveedor.verificarInputData}"/>
+                        <p:outputLabel value="#{beansGestionProveedor.proveedor.nombre}" rendered="#{beansGestionProveedor.verificarVistaData}"/>
                     </h:panelGrid>
                     <h:panelGrid  width="95%">
                         <p:outputLabel for="ruc" value="RUC" />
-                        <p:inputText  value="#{beansGestionProveedor.proveedor.nroRUC}" type="number"  id="ruc" required="true"/>
+                        <p:inputText  value="#{beansGestionProveedor.proveedor.nroRUC}" type="number"  id="ruc" required="true" rendered="#{beansGestionProveedor.verificarInputData}"/>
+                        <p:outputLabel value="#{beansGestionProveedor.proveedor.nroRUC}" rendered="#{beansGestionProveedor.verificarVistaData}" />
                     </h:panelGrid>
                 </h:panelGrid><br/>
                 <h:panelGrid columns="2" width="100%">
@@ -88,20 +99,23 @@
                         <p:outputLabel for="tipoEmpresa" value="Tipo de Empresa" />
                     </h:panelGrid>
                     <h:panelGrid  width="536">
-                        <p:selectOneMenu  id="tipoEmpresa" value="#{beansGestionProveedor.idTipoEmpresa}" styleClass="ui-selectonemenu" required="true" style="width: 100%" autoWidth="false"  >
+                        <p:selectOneMenu  id="tipoEmpresa" value="#{beansGestionProveedor.idTipoEmpresa}" styleClass="ui-selectonemenu" required="true" style="width: 100%" autoWidth="false" rendered="#{beansGestionProveedor.verificarInputData}" >
                             <f:selectItem noSelectionOption="true" itemLabel="Selecionar Opcion" />
                             <f:selectItems  value="#{beansGestionProveedor.tipoEmpresas}" var="te" itemLabel="#{te.abreviatura}" itemValue="#{te.id}" itemDescription="#{te.nombre}"/>
                         </p:selectOneMenu>
+                        <p:outputLabel  value="#{beansGestionProveedor.proveedor.tipoEmpresa.nombre}" rendered="#{beansGestionProveedor.verificarVistaData}" />
                     </h:panelGrid>
                 </h:panelGrid><br/>
                 <h:panelGrid columns="2" width="100%">
                     <h:panelGrid width="95%">
                         <p:outputLabel for="correo" value="Correo" />
-                        <p:inputText  value="#{beansGestionProveedor.proveedor.correo}"  id="correo" required="true" />
+                        <p:inputText  value="#{beansGestionProveedor.proveedor.correo}"  id="correo" required="true" rendered="#{beansGestionProveedor.verificarInputData}" />
+                        <p:outputLabel value="#{beansGestionProveedor.proveedor.correo}" rendered="#{beansGestionProveedor.verificarVistaData}"/>
                     </h:panelGrid>
                     <h:panelGrid  width="95%">
                         <p:outputLabel for="Telefono" value="Telefono"/>
-                        <p:inputText value="#{beansGestionProveedor.proveedor.telefono}" type="number"  id="Telefono" required="true"/>
+                        <p:inputText value="#{beansGestionProveedor.proveedor.telefono}" type="number"  id="Telefono" required="true" rendered="#{beansGestionProveedor.verificarInputData}"/>
+                        <p:outputLabel value="#{beansGestionProveedor.proveedor.telefono}" rendered="#{beansGestionProveedor.verificarVistaData}" />
                     </h:panelGrid>
                 </h:panelGrid><br/>
                 <h:panelGrid columns="2" width="100%">
@@ -109,23 +123,19 @@
                         <p:outputLabel for="Direccion" value="Direccion" />
                     </h:panelGrid>
                     <h:panelGrid  width="536">
-                        <p:inputText value="#{beansGestionProveedor.proveedor.direccion}"  id="Direccion" required="true"/>
+                        <p:inputText value="#{beansGestionProveedor.proveedor.direccion}"  id="Direccion" required="true" rendered="#{beansGestionProveedor.verificarInputData}"/>
+                        <p:outputLabel value="#{beansGestionProveedor.proveedor.direccion}" rendered="#{beansGestionProveedor.verificarVistaData}" />
                     </h:panelGrid>
                 </h:panelGrid>
-
             </p:outputPanel>
             <f:facet name="footer">
-                <p:commandButton value="Guardar"  icon="pi pi-check" action="#{beansGestionProveedor.guardar()}" update="dialog-content" process="dialog-content @this" />
+                <p:commandButton value="Guardar"  icon="pi pi-check" action="#{beansGestionProveedor.guardar()}" update="dialog-content" process="dialog-content @this" rendered="#{beansGestionProveedor.verificarInputData}" />
                 <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialog').hide()"  styleClass="ui-button-secondary" type="button"/>
             </f:facet>
         </p:dialog>
-        <p:confirmDialog widgetVar="delete" showEffect="fade" width="300" message="Deseas dar de baja este producto?" header="Confirmacion"
-                         severity="warn">
-            <p:commandButton value="Yes" icon="pi pi-check"
-                             process="@this" update=":form"
-                             oncomplete="PF('delete').hide()" />
-            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-                             onclick="PF('delete').hide()" />
+        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+            <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" />
         </p:confirmDialog>
     </h:form>
 </h:body>

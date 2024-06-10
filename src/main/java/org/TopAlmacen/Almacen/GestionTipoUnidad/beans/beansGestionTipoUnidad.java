@@ -14,6 +14,7 @@ import org.primefaces.util.LangUtils;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
 
@@ -22,14 +23,22 @@ import java.util.Locale;
 @Data
 public class beansGestionTipoUnidad implements Serializable {
 
+    /*  ================================== Inyecciones  ==================== */
     @Inject
     private ServicioGestionTipoUnidad servicioGestionTipoUnidad;
 
+    /*  =================================================================== */
+    /*  ================================== Listas  ======================== */
     private List<TipoUnidad> lstTabla;
     private List<TipoUnidad> lstSeleccionado;
+
+    /*  ================================================================== */
+    /*  ================================== Variables  ==================== */
     private TipoUnidad tipoUnidad;
     private int id_seleccionada;
 
+    /*  ====================================================================== */
+    /*  ================================== Inicializador  ==================== */
     @PostConstruct
     public void init(){
         try {
@@ -39,6 +48,8 @@ public class beansGestionTipoUnidad implements Serializable {
         }
     }
 
+    /*  ================================================================= */
+    /*  ================================== Metodos  ==================== */
     public String irTipoUnidad() throws SQLException {
         lstTabla = servicioGestionTipoUnidad.lstTipoUnidad();
         return "gestionProducto/TipoUnidad";
@@ -52,13 +63,33 @@ public class beansGestionTipoUnidad implements Serializable {
         tipoUnidad = servicioGestionTipoUnidad.buscar(id_seleccionada);
     }
 
+    public void CambiarEstado() throws  SQLException{
+        tipoUnidad = servicioGestionTipoUnidad.buscar(id_seleccionada);
+        switch (tipoUnidad.getEstado()){
+            case "Activo":
+                tipoUnidad.setEstado("Inactivo");
+                break;
+            case "Inactivo":
+                tipoUnidad.setEstado("Activo");
+                break;
+        }
+        servicioGestionTipoUnidad.CambiarEstado(tipoUnidad);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El estado del tipo de unidad ha cambiado a "+tipoUnidad.getEstado()+"!"));
+        lstTabla = servicioGestionTipoUnidad.lstTipoUnidad();
+        PrimeFaces.current().executeScript("PF('dialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt");
+    }
+
     public void  guardar() throws SQLException {
         if (tipoUnidad.getId() == 0){
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            tipoUnidad.setEstado("Activo");
+            tipoUnidad.setCfecha(timestamp);
             servicioGestionTipoUnidad.registrar(tipoUnidad);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("TipoUnidad Agregado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El tipo de unidad "+tipoUnidad.getNombre()+" ha sido registrado exitosamente en el sistema!"));
         }else{
             servicioGestionTipoUnidad.modificar(tipoUnidad);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Tipo Unidad Actualizado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El tipo de unidad "+tipoUnidad.getNombre()+" ha sido actualizado exitosamente en el sistema!"));
         }
         lstTabla = servicioGestionTipoUnidad.lstTipoUnidad();
         PrimeFaces.current().executeScript("PF('dialog').hide()");
@@ -77,6 +108,8 @@ public class beansGestionTipoUnidad implements Serializable {
                 || c.getAbrev().toLowerCase().contains(filterText);
     }
 
+    /*  =========================== Extensiones  ========================= */
+    /*  ================================================================== */
     private int getInteger(String string) {
         try {
             return Integer.parseInt(string);
@@ -85,4 +118,6 @@ public class beansGestionTipoUnidad implements Serializable {
             return 0;
         }
     }
+
+    /*  ================================================================== */
 }

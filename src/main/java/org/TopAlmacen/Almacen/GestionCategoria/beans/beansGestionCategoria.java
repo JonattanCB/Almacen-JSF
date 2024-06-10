@@ -24,14 +24,22 @@ import java.util.Locale;
 @Data
 public class beansGestionCategoria implements Serializable {
 
+    /*  ================================== Inyecciones  ==================== */
     @Inject
     private ServicioGestionCategoria servicioGestionCategoria;
 
+    /*  =================================================================== */
+    /*  ================================== Listas  ======================== */
     private List<Categoria> lstTabla;
     private List<Categoria> lstSeleccionado;
+
+    /*  ================================================================== */
+    /*  ================================== Variables  ==================== */
     private Categoria categoria;
     private int id_seleccionada;
 
+    /*  ====================================================================== */
+    /*  ================================== Inicializador  ==================== */
     @PostConstruct
     public void init() {
         try{
@@ -41,6 +49,8 @@ public class beansGestionCategoria implements Serializable {
         }
     }
 
+    /*  ================================================================= */
+    /*  ================================== Metodos  ==================== */
     public String irCategoria() throws SQLException {
         lstTabla = servicioGestionCategoria.lstCategoria();
         return "gestionProducto/categoria";
@@ -48,6 +58,23 @@ public class beansGestionCategoria implements Serializable {
 
     public void nuevaCategoria(){
         categoria = new Categoria();
+    }
+
+    public void cambiarEstado() throws SQLException {
+        categoria = servicioGestionCategoria.buscarCategoria(id_seleccionada);
+        switch (categoria.getEstado()){
+            case "Activo":
+                categoria.setEstado("Inactivo");
+                break;
+            case "Inactivo":
+                categoria.setEstado("Activo");
+                break;
+        }
+        servicioGestionCategoria.CambiarEstado(categoria);
+        lstTabla = servicioGestionCategoria.lstCategoria();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El estado de categoria ha cambiado a "+categoria.getEstado()+"!"));
+        PrimeFaces.current().executeScript("PF('dialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt");
     }
 
     public void editarCategoria() throws SQLException {
@@ -58,12 +85,12 @@ public class beansGestionCategoria implements Serializable {
         if (categoria.getId() == 0){
             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
             categoria.setCFecha(timestamp);
-            categoria.setEstado("1");
+            categoria.setEstado("Activo");
             servicioGestionCategoria.registrarCategoria(categoria);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Categoria Agregado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡La categoria "+categoria.getNombre()+" ha sido registrado exitosamente en el sistema!"));
         }else{
             servicioGestionCategoria.actualizar(categoria);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Categoria Actualizado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡La categoria "+categoria.getNombre()+" ha sido actualizado exitosamente en el sistema!"));
         }
         lstTabla = servicioGestionCategoria.lstCategoria();
         PrimeFaces.current().executeScript("PF('dialog').hide()");
@@ -82,6 +109,8 @@ public class beansGestionCategoria implements Serializable {
                 || c.getDescripcion().toLowerCase().contains(filterText);
     }
 
+    /*  =========================== Extensiones  ========================= */
+    /*  ================================================================== */
     private int getInteger(String string) {
         try {
             return Integer.parseInt(string);
@@ -91,4 +120,5 @@ public class beansGestionCategoria implements Serializable {
         }
     }
 
+    /*  ================================================================== */
 }

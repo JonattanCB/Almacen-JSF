@@ -14,6 +14,7 @@ import org.primefaces.util.LangUtils;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
 
@@ -22,14 +23,22 @@ import java.util.Locale;
 @Data
 public class beansGestionTipoempresa implements Serializable {
 
+    /*  ================================== Inyecciones  ==================== */
     @Inject
     private ServicioGestionTipoEmpresa servicioGestionTipoEmpresa;
 
+    /*  =================================================================== */
+    /*  ================================== Listas  ======================== */
     private List<TipoEmpresa> lstTabla;
     private List<TipoEmpresa> lstSeleccionado;
+
+    /*  ================================================================== */
+    /*  ================================== Variables  ==================== */
     private TipoEmpresa tipoEmpresa;
     private int id_seleccionada;
 
+    /*  ====================================================================== */
+    /*  ================================== Inicializador  ==================== */
     @PostConstruct
     public void init(){
         try {
@@ -39,6 +48,8 @@ public class beansGestionTipoempresa implements Serializable {
         }
     }
 
+    /*  ================================================================= */
+    /*  ================================== Metodos  ==================== */
     public String irTipoEmpresa() throws SQLException {
         lstTabla = servicioGestionTipoEmpresa.lstTodo();
         return "gestionProducto/TipoEmpresa";
@@ -52,13 +63,33 @@ public class beansGestionTipoempresa implements Serializable {
         tipoEmpresa = servicioGestionTipoEmpresa.buscar(id_seleccionada);
     }
 
+    public  void CambioEstado() throws SQLException{
+        tipoEmpresa = servicioGestionTipoEmpresa.buscar(id_seleccionada);
+        switch (tipoEmpresa.getEstado()){
+            case "Activo":
+                tipoEmpresa.setEstado("Inactivo");
+                break;
+            case "Inactivo":
+                tipoEmpresa.setEstado("Activo");
+                break;
+        }
+        servicioGestionTipoEmpresa.CambioEstado(tipoEmpresa);
+        lstTabla = servicioGestionTipoEmpresa.lstTodo();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El estado de tipo de empresa ha cambiado a "+tipoEmpresa.getEstado()+"!"));
+        PrimeFaces.current().executeScript("PF('dialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt");
+    }
+
     public void  guardar() throws SQLException {
         if (tipoEmpresa.getId() == 0){
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            tipoEmpresa.setEstado("Activo");
+            tipoEmpresa.setCfecha(timestamp);
             servicioGestionTipoEmpresa.registrar(tipoEmpresa);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Tipo empresa Agregado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El tipo de empresa "+tipoEmpresa.getNombre()+" ha sido registrado exitosamente en el sistema!"));
         }else{
             servicioGestionTipoEmpresa.modificar(tipoEmpresa);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Tipo empresa Actualizado"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El tipo de empresa "+tipoEmpresa.getNombre()+" ha sido actualizado exitosamente en el sistema!"));
         }
         lstTabla = servicioGestionTipoEmpresa.lstTodo();
         PrimeFaces.current().executeScript("PF('dialog').hide()");
@@ -77,6 +108,8 @@ public class beansGestionTipoempresa implements Serializable {
                 || c.getAbreviatura().toLowerCase().contains(filterText);
     }
 
+    /*  =========================== Extensiones  ========================= */
+    /*  ================================================================== */
     private int getInteger(String string) {
         try {
             return Integer.parseInt(string);
@@ -85,4 +118,6 @@ public class beansGestionTipoempresa implements Serializable {
             return 0;
         }
     }
+
+    /*  ================================================================== */
 }

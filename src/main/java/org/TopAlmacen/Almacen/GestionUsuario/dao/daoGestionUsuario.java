@@ -8,4 +8,6 @@ import java.sql.SQLException;
 public interface daoGestionUsuario extends Crud<Usuario> {
 
     boolean verificadorUsuario(Usuario usuario) throws SQLException;
+
+    void  cambiarEstado(Usuario usuario) throws  SQLException;
 }

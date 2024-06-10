@@ -120,4 +120,28 @@ public class ImplGestionRol implements daoGestionRol {
             conn.cerrar();
         }
     }
+
+    @Override
+    public List<Rol> listaRolActivo() throws SQLException {
+        List<Rol> buscarTodos = new ArrayList<>();
+        try {
+            PreparedStatement ps = conn.crearCNX().prepareStatement("SELECT id, nombre, descripcion, estado, \"Cfecha\"\n" +
+                    "\tFROM public.rol where estado='Activo' order by id asc;");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Rol rol = new Rol();
+                rol.setId(rs.getInt(1));
+                rol.setNombre(rs.getString(2));
+                rol.setDescripcion(rs.getString(3));
+                rol.setEstado(rs.getString(4));
+                rol.setCfecha(rs.getTimestamp(5));
+                buscarTodos.add(rol);
+            }
+        }catch (Exception e){
+            System.err.println("Error" +e);
+        }finally {
+            conn.cerrar();
+        }
+        return buscarTodos;
+    }
 }

@@ -14,7 +14,12 @@ import java.util.List;
 @LocalBean
 public class ServicioGestionTipoEmpresa implements Serializable {
 
-    private final daoTipoEmpresa dao = new ImplGestionTipoEmpresa();
+    private final daoTipoEmpresa dao;
+
+    public ServicioGestionTipoEmpresa() {
+        dao = new ImplGestionTipoEmpresa();
+    }
+
     public List<TipoEmpresa> lstTodo() throws SQLException {
         return  dao.buscarTodos();
     }
@@ -31,5 +36,11 @@ public class ServicioGestionTipoEmpresa implements Serializable {
         return dao.buscar(id);
     }
 
+    public void CambioEstado(TipoEmpresa te) throws  SQLException{
+        dao.CambioEstado(te);
+    }
 
+    public List<TipoEmpresa> listTipoEmpesaActivo() throws SQLException{
+        return  dao.listTipoEmpresaActivo();
+    }
 }

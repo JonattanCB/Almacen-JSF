@@ -12,16 +12,22 @@ import java.util.List;
 
 public class ImplGestionTipoUnidad  implements daoGestionTipoUnidad {
 
-    private conexion con = new conexion();
+    private final conexion con;
+
+    public ImplGestionTipoUnidad() {
+        con = new conexion();
+    }
 
     @Override
     public void registrar(TipoUnidad tipoUnidad) throws SQLException {
         try {
             PreparedStatement ps = con.crearCNX().prepareStatement("INSERT INTO public.\"TipoUnidad\"(\n" +
-                    "\t nombre, abrev)\n" +
-                    "\tVALUES ( ?, ?);");
+                    "\t, nombre, abrev, estado, \"Cfecha\")\n" +
+                    "\tVALUES ( ?, ?, ?, ?);");
             ps.setString(1, tipoUnidad.getNombre());
             ps.setString(2, tipoUnidad.getAbrev());
+            ps.setString(3,tipoUnidad.getEstado());
+            ps.setTimestamp(4, tipoUnidad.getCfecha());
             ps.execute();
         }catch (SQLException e){
             System.err.println(e.getMessage());
@@ -55,14 +61,16 @@ public class ImplGestionTipoUnidad  implements daoGestionTipoUnidad {
     public TipoUnidad buscar(int t) throws SQLException {
         TipoUnidad tu = new TipoUnidad();
         try {
-            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, nombre, abrev\n" +
-                    "\tFROM public.\"TipoUnidad\" where id= ?;");
+            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, nombre, abrev, estado, \"Cfecha\"\n" +
+                    "\tFROM public.\"TipoUnidad\" where id = ?;");
             ps.setInt(1,t);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 tu.setId(rs.getInt(1));
                 tu.setNombre(rs.getString(2));
                 tu.setAbrev(rs.getString(3));
+                tu.setEstado(rs.getString(4));
+                tu.setCfecha(rs.getTimestamp(5));
             }
         }catch (SQLException e){
             System.err.println(e.getMessage());
@@ -76,14 +84,16 @@ public class ImplGestionTipoUnidad  implements daoGestionTipoUnidad {
     public List<TipoUnidad> buscarTodos() throws SQLException {
         List<TipoUnidad> lst = new ArrayList<>();
         try {
-            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, nombre, abrev\n" +
-                    "\tFROM public.\"TipoUnidad\";");
+            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, nombre, abrev, estado, \"Cfecha\"\n" +
+                    "\tFROM public.\"TipoUnidad\" order by id asc;");
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 TipoUnidad tu = new TipoUnidad();
                 tu.setId(rs.getInt(1));
                 tu.setNombre(rs.getString(2));
                 tu.setAbrev(rs.getString(3));
+                tu.setEstado(rs.getString(4));
+                tu.setCfecha(rs.getTimestamp(5));
                 lst.add(tu);
             }
         }catch (SQLException e){
@@ -92,5 +102,21 @@ public class ImplGestionTipoUnidad  implements daoGestionTipoUnidad {
             con.cerrar();
         }
         return  lst;
+    }
+
+    @Override
+    public void cambiarestado(TipoUnidad tipoUnidad) throws SQLException {
+        try {
+            PreparedStatement ps = con.crearCNX().prepareStatement("UPDATE public.\"TipoUnidad\"\n" +
+                    "\tSET  estado=?\n" +
+                    "\tWHERE id=?;");
+            ps.setString(1, tipoUnidad.getEstado());
+            ps.setInt(2, tipoUnidad.getId());
+            ps.execute();
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
     }
 }

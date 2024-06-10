@@ -14,7 +14,11 @@ import java.util.List;
 @LocalBean
 public class ServicioGestionRol implements Serializable {
 
-    private daoGestionRol dao = new ImplGestionRol();
+    private final daoGestionRol dao;
+
+    public ServicioGestionRol() {
+        dao = new ImplGestionRol();
+    }
 
     public List<Rol> listarRol() throws SQLException {
         List<Rol> lst = dao.buscarTodos();
@@ -35,6 +39,10 @@ public class ServicioGestionRol implements Serializable {
 
     public void CambiarEstado(Rol rol) throws SQLException  {
         dao.cambioEstado(rol);
+    }
+
+    public List<Rol> listRolActivo() throws  SQLException{
+        return  dao.listaRolActivo();
     }
 
 }

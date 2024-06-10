@@ -13,7 +13,11 @@ import java.util.List;
 @Stateless
 @LocalBean
 public class ServicioGestionCategoria  implements Serializable {
-    private final daoGestionCategoria dao = new ImplGestionCategoria();
+    private final daoGestionCategoria dao;
+
+    public ServicioGestionCategoria() {
+        dao = new ImplGestionCategoria();
+    }
 
     public Categoria buscarCategoria(int id) throws SQLException {
         return  dao.buscar(id);
@@ -30,4 +34,9 @@ public class ServicioGestionCategoria  implements Serializable {
     public void registrarCategoria(Categoria c) throws SQLException {
         dao.registrar(c);
     }
+
+    public  void CambiarEstado(Categoria c) throws  SQLException {
+        dao.CambiarEstado(c);
+    }
+
 }

@@ -125,4 +125,48 @@ public class ImplGestionProveedor implements daoGestionProveedor {
         }
         return lst;
     }
+
+    @Override
+    public void CambioEstado(Proveedor proveedor) throws SQLException {
+        try {
+            PreparedStatement ps = con.crearCNX().prepareStatement("UPDATE public.proveedor\n" +
+                    "\tSET estado=?\n" +
+                    "\tWHERE id=?;");
+            ps.setString(1, proveedor.getEstado());
+            ps.setInt(2,proveedor.getIdProveedor());
+            ps.execute();
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
+    }
+
+    @Override
+    public List<Proveedor> lstProveedorActivo() throws SQLException {
+        List<Proveedor> lst = new ArrayList<>();
+        try {
+            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, \"NroRUC\", nombre, tipoempesa, direccion, telefono, correo, estado, \"Cfecha\"\n" +
+                    "\tFROM public.proveedor where estado='Activo';");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                Proveedor p = new Proveedor();
+                p.setIdProveedor(rs.getInt(1));
+                p.setNroRUC(rs.getInt(2));
+                p.setNombre(rs.getString(3));
+                p.setTipoEmpresa(daoTE.buscar(rs.getInt(4)));
+                p.setDireccion(rs.getString(5));
+                p.setTelefono(rs.getInt(6));
+                p.setCorreo(rs.getString(7));
+                p.setEstado(rs.getString(8));
+                p.setCfecha(rs.getTimestamp(9));
+                lst.add(p);
+            }
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
+        return lst;
+    }
 }

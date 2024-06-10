@@ -15,9 +15,15 @@ import java.util.List;
 
 public class ImplGestionUsuario implements daoGestionUsuario {
 
-    private final conexion con = new conexion();
-    private final daoGestionRol daorol = new ImplGestionRol();
-    private final daoGestionPersona daopersonal = new ImplGestionPersona();
+    private final conexion con;
+    private final daoGestionRol daorol ;
+    private final daoGestionPersona daopersonal ;
+
+    public ImplGestionUsuario() {
+        con = new conexion();
+        daorol = new ImplGestionRol();
+        daopersonal = new ImplGestionPersona();
+    }
 
     @Override
     public void registrar(Usuario usuario) throws SQLException {
@@ -132,5 +138,21 @@ public class ImplGestionUsuario implements daoGestionUsuario {
             con.cerrar();
         }
         return false;
+    }
+
+    @Override
+    public void cambiarEstado(Usuario usuario) throws SQLException {
+        try {
+            PreparedStatement ps = con.crearCNX().prepareStatement("UPDATE public.usuario\n" +
+                    "\tSET estado=?\n" +
+                    "\tWHERE id=?;");
+            ps.setString(1, usuario.getEstado());
+            ps.setInt(2, usuario.getId());
+            ps.execute();
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
     }
 }

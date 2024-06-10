@@ -84,7 +84,7 @@ public class ImplGestionCategoria implements daoGestionCategoria {
         List<Categoria> categorias = new ArrayList<>();
         try {
             PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, nombre, descripcion, estado, cfecha\n" +
-                    "\tFROM public.\"Categoria\" ;");
+                    "\tFROM public.\"Categoria\" order by id asc ;");
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 Categoria c = new Categoria();
@@ -100,7 +100,22 @@ public class ImplGestionCategoria implements daoGestionCategoria {
         }finally {
             con.cerrar();
         }
-
         return categorias;
+    }
+
+    @Override
+    public void CambiarEstado(Categoria categoria) throws SQLException {
+        try {
+            PreparedStatement ps = con.crearCNX().prepareStatement("UPDATE public.\"Categoria\"\n" +
+                    "\tSET  estado=?\n" +
+                    "\tWHERE id=?;");
+            ps.setString(1, categoria.getEstado());
+            ps.setInt(2, categoria.getId());
+            ps.execute();
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
     }
 }
