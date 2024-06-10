@@ -12,7 +12,11 @@ import java.util.List;
 
 public class ImplGestionRol implements daoGestionRol {
 
-    private final conexion conn = new conexion();
+    private final conexion conn;
+
+    public ImplGestionRol() {
+        conn = new conexion();
+    }
 
     @Override
     public void registrar(Rol rol) throws SQLException {
@@ -24,7 +28,7 @@ public class ImplGestionRol implements daoGestionRol {
             ps.setString(2, rol.getDescripcion());
             ps.setString(3, rol.getEstado());
             ps.setTimestamp(4,rol.getCfecha());
-            ps.executeQuery();
+            ps.execute();
         }catch (Exception e){
             System.err.println("Error" +e);
         }finally {
@@ -41,7 +45,7 @@ public class ImplGestionRol implements daoGestionRol {
             ps.setString(1, rol.getNombre());
             ps.setString(2, rol.getDescripcion());
             ps.setInt(3, rol.getId());
-            ps.executeQuery();
+            ps.execute();
         }catch (Exception e){
             System.err.println("Error" +e);
         }finally {
@@ -101,4 +105,19 @@ public class ImplGestionRol implements daoGestionRol {
         return buscarTodos;
     }
 
+    @Override
+    public void cambioEstado(Rol rol) throws SQLException {
+        try {
+            PreparedStatement ps = conn.crearCNX().prepareStatement("UPDATE public.rol\n" +
+                    "\tSET estado=?\n" +
+                    "\tWHERE id=?;");
+            ps.setString(1, rol.getEstado());
+            ps.setInt(2, rol.getId());
+            ps.execute();
+        }catch (Exception e){
+            System.err.println("Error" +e);
+        }finally {
+            conn.cerrar();
+        }
+    }
 }

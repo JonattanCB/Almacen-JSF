@@ -12,7 +12,7 @@ import java.util.List;
 
 @Stateless
 @LocalBean
-public class servicioGestionTipoUnidad implements Serializable {
+public class ServicioGestionTipoUnidad implements Serializable {
 
     private final daoGestionTipoUnidad dao = new ImplGestionTipoUnidad();
 

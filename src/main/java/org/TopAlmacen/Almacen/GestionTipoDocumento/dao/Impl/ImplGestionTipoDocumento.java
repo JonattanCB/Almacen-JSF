@@ -65,7 +65,7 @@ public class ImplGestionTipoDocumento implements daoGestionTipoDocumento {
     public TipoDocumento buscar(int t) throws SQLException {
         TipoDocumento td = new TipoDocumento();
         try {
-            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, nombre, descripcion\n" +
+            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, nombre, descripcion, estado\n" +
                     "\tFROM public.tipodocumento where id =?;");
             ps.setInt(1,t);
             ResultSet rs = ps.executeQuery();
@@ -73,6 +73,7 @@ public class ImplGestionTipoDocumento implements daoGestionTipoDocumento {
                 td.setId(rs.getInt(1));
                 td.setNombre(rs.getString(2));
                 td.setDescripcion(rs.getString(3));
+                td.setEstado(rs.getString(4));
             }
         }catch (Exception e){
             System.err.println(e.getMessage());
@@ -104,5 +105,21 @@ public class ImplGestionTipoDocumento implements daoGestionTipoDocumento {
             con.cerrar();
         }
         return  lst;
+    }
+
+    @Override
+    public void CambiarEstado(TipoDocumento tipoDocumento) throws SQLException {
+        try{
+            PreparedStatement ps = con.crearCNX().prepareStatement("UPDATE public.tipodocumento\n" +
+                    "\tSET estado=? \n" +
+                    "\tWHERE id =?;");
+            ps.setString(1, tipoDocumento.getEstado());
+            ps.setInt(2, tipoDocumento.getId());
+            ps.execute();
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
     }
 }

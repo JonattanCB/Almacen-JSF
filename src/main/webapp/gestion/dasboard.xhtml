@@ -23,15 +23,15 @@
                 <h:graphicImage styleClass="logo" url="https://www.zarla.com/images/zarla-top-almacn-1x1-2400x2400-20220204-fbm4jgvkfpqm7pcvqqfv.png" />
             </h:panelGrid>
             <div class="Contenedor-menu-opciones"><br/>
-                <h:commandLink  target="escritorio" value="Dasboard" action="panels" /><br />
-                <h:commandLink  target="escritorio" value="rol" action="#{beansGestionRol.irRol()}"   /><br/>
+                <h:commandLink target="escritorio" value="Dasboard" action="panels" /><br />
+                <h:commandLink target="escritorio" value="rol" action="#{beansGestionRol.irRol()}"   /><br/>
                 <h:commandLink target="escritorio"  value="tipo documento" action="#{beansGestionTipoDocumento.irTipoDocuento()}" /><br/>
-                <h:commandLink  target="escritorio" value="usuarios" action="#{beansGestionUsuario.irUsuario()}" /><br/>
+                <h:commandLink target="escritorio" value="usuarios" action="#{beansGestionUsuario.irUsuario()}" /><br/>
                 <h:commandLink target="escritorio" value="categoria" action="#{beansGestionCategoria.irCategoria()}" /><br/>
-                <h:commandLink  target="escritorio" value="Tipo de Unidad" action="#{beansGestionTipoUnidad.irTipoUnidad()}"/><br/>
+                <h:commandLink target="escritorio" value="Tipo de Unidad" action="#{beansGestionTipoUnidad.irTipoUnidad()}"/><br/>
                 <h:commandLink target="escritorio" value="Tipo de Empresa" action="#{beansGestionTipoempresa.irTipoEmpresa()}" /><br/>
                 <h:commandLink target="escritorio" value="proveedor" action="#{beansGestionProveedor.irProveedor()}"/><br/>
-
+                <h:commandLink target="escritorio" value="producto" action="#{beansGestionProducto.irProducto()}" /><br/>
 
 
 
@@ -53,9 +53,11 @@
 
             </div>
         </div>
-        <iframe name="escritorio" class="contenido-escritorio" >
-
-        </iframe>
+        <p:panel id="iframePanel" styleClass="custom-panel" style="width: 100%; height: 730px">
+            <h:panelGroup layout="block">
+                <iframe name="escritorio" class="contenido-escritorio" src="panels.xhtml" ></iframe>
+            </h:panelGroup>
+        </p:panel>
     </h:form>
 </h:body>
 </html>

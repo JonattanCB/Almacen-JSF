@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Producto</title>
+    <h:outputStylesheet  library="primefaces-saga" name="theme.css" />
+    <h:outputStylesheet library="css" name="SylerTodo.css"/>
+    <h:outputStylesheet library="css" name="StylerPanels.css"/>
+</h:head>
+<h:body styleClass="contendor-panel" >
+    <h:form  id="form">
+        <p:growl id="messages" showDetail="true" />
+        <p:panel styleClass="card-informacion">
+            <f:facet name="header">
+                <i class="pi pi-sitemap"/> <p:outputLabel value="Listado de Producto" styleClass="titulo-card" />
+            </f:facet>
+            <p:toolbar>
+                <p:toolbarGroup >
+                    <p:commandButton value="Nuevo Producto" icon="pi pi-plus" actionListener="#{beansGestionProducto.irNuevoProducto()}"
+                                     update=":dialogs:dialog-content" oncomplete="PF('dialog').show()"
+                                     styleClass="ui-button-success" style="margin-right: .5rem">
+                        <p:resetInput target=":dialogs:dialog-content" />
+                    </p:commandButton>
+                </p:toolbarGroup>
+
+            </p:toolbar>
+            <p:dataTable id="dt" var="producto" value="#{beansGestionProducto.productoList}"  widgetVar="producto"
+                         emptyMessage="No hay Producto Registrados"
+                         filteredValue="#{beansGestionProducto.selectproductoList}"
+                         globalFilterFunction="#{beansGestionProducto.globalFilterFunction}"
+                         rows="10" paginator="true" rowSelectMode="add" paginatorPosition="bottom">
+                <f:facet name="header">
+                    <div class="buscador-table">
+                        <span class="titulo-tabla">PRODUCTOS</span>
+                        <span class="filter-container ui-input-icon-left" style="float: right">
+                            <i class="pi pi-search"/>
+                            <p:inputText id="globalFilter" onkeyup="PF('producto').filter()"
+                                         placeholder="Buscar todo los campos" />
+                        </span>
+                    </div>
+                </f:facet>
+                <p:column headerText="#"  >
+                    <h:outputText value="#{producto.idProducto}" />
+                </p:column>
+                <p:column headerText="Nombre" >
+                    <h:outputText value="#{producto.nombre}" />
+                </p:column>
+                <p:column headerText="Categoria" >
+                    <h:outputText value="#{producto.categoria.nombre}" />
+                </p:column>
+                <p:column headerText="Proveedor" >
+                    <h:outputText value="#{producto.proveedor.nombre}" />
+                </p:column>
+                <p:column headerText="Acciones">
+                    <p:commandButton icon="pi pi-pencil" update=":dialogs:dialog-content"
+                                     oncomplete="PF('dialog').show()" action="#{beansGestionProducto.irActualizarProducto()}"
+                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                        <f:setPropertyActionListener value="#{producto.idProducto}" target="#{beansGestionProducto.idProducto}" />
+                    </p:commandButton> |
+                    <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+                                     process="@this"
+                                     oncomplete="PF('deleterol').show()" >
+                        <f:setPropertyActionListener value="#{producto.idProducto}" target="#{beansGestionProducto.idProducto}" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+    <h:form id="dialogs" enctype="multipart/form-data">
+        <p:dialog header="Detalles de Producto" showEffect="fade" modal="true" widgetVar="dialog" width="800" height="400" responsive="true" styleClass="dialogs-barra">
+            <p:outputPanel id="dialog-content" styleClass="ui-fluid" >
+                <p:accordionPanel multiple="true" >
+                    <p:tab title="Datos Productos">
+                        <h:panelGrid width="100%" style="text-align: center">
+                            <h:panelGrid width="97%" id="subir_archivos">
+                                <h:graphicImage  value="#{beansGestionProducto.urlFoto}"  id="imageComponent" style="width: 100px; height: 100px"/>
+                                <p:outputLabel for="foto" value="Seleccione la foto" />
+                                <p:fileUpload id="foto" listener="#{beansGestionProducto.seleccionarFoto}" mode="simple" skinSimple="true"
+                                              auto="true" update="subir_archivos imageComponent"/>
+                            </h:panelGrid>
+                        </h:panelGrid><br/>
+                        <h:panelGrid columns="2" width="100%">
+                            <h:panelGrid width="95%">
+                                <p:outputLabel for="Nombre" value="Nombre" />
+                                <p:inputText  value="#{beansGestionProducto.producto.nombre}"  id="Nombre" required="true" />
+                            </h:panelGrid>
+                            <h:panelGrid  width="95%">
+                                <p:outputLabel for="categoria" value="Categoria" />
+                                <p:selectOneMenu id="categoria" styleClass="ui-selectonemenu"  value="#{beansGestionProducto.idSeleccionCategoria}" required="true" style="width:100%" autoWidth="false" >
+                                    <f:selectItem  noSelectionOption="true" itemLabel="Seleccionar Opcion"  />
+                                    <f:selectItems  value="#{beansGestionProducto.categoriaList}" var="cat" itemLabel="#{cat.nombre}" itemValue="#{cat.id}" itemDescription="#{cat.descripcion}"  />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid><br/>
+
+                        <h:panelGrid columns="2" width="100%">
+                            <h:panelGrid width="95%">
+                                <p:outputLabel for="tunidad" value="Tipo de unidad" />
+                                <p:selectOneMenu id="tunidad" styleClass="ui-selectonemenu"  value="#{beansGestionProducto.idSeleccionTunidad}" required="true" style="width:100%" autoWidth="false" >
+                                    <f:selectItem  noSelectionOption="true" itemLabel="Seleccionar Opcion"  />
+                                    <f:selectItems  value="#{beansGestionProducto.unidadList}" var="uni" itemLabel="#{uni.abrev}" itemValue="#{uni.id}" itemDescription="#{uni.nombre}"  />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid  width="95%">
+                                <p:outputLabel for="Proveedor" value="Proveedor" />
+                                <p:selectOneMenu id="Proveedor" styleClass="ui-selectonemenu"  value="#{beansGestionProducto.idSeleccionProveedor}" required="true" style="width:100%" autoWidth="false" >
+                                    <f:selectItem  noSelectionOption="true" itemLabel="Seleccionar Opcion"  />
+                                    <f:selectItems  value="#{beansGestionProducto.proveedorList}" var="prove" itemLabel="#{prove.nombre}" itemValue="#{prove.idProveedor}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid><br/>
+                        <div class="field">
+                            <p:outputLabel for="descripcion" value="Descripcion" />
+                            <br/><p:inputTextarea id="descripcion" value="#{beansGestionProducto.producto.descripcion}"   required="true" />
+                        </div>
+                    </p:tab>
+                </p:accordionPanel>
+
+
+
+
+
+
+
+
+
+
+
+            </p:outputPanel>
+            <f:facet name="footer">
+                <p:commandButton value="Guardar"  icon="pi pi-check" action="#{beansGestionProducto.guardar()}" update="dialog-content" process="dialog-content @this" />
+                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('dialog').hide()"  styleClass="ui-button-secondary" type="button"/>
+            </f:facet>
+        </p:dialog>
+        <p:confirmDialog widgetVar="delete" showEffect="fade" width="300" message="Deseas dar de baja este producto?" header="Confirmacion"
+                         severity="warn">
+            <p:commandButton value="Yes" icon="pi pi-check"
+                             process="@this" update=":form"
+                             oncomplete="PF('delete').hide()" />
+            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                             onclick="PF('delete').hide()" />
+        </p:confirmDialog>
+    </h:form>
+</h:body>
+</html>

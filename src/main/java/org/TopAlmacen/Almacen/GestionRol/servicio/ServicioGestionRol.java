@@ -33,4 +33,8 @@ public class ServicioGestionRol implements Serializable {
         return dao.buscar(id);
     }
 
+    public void CambiarEstado(Rol rol) throws SQLException  {
+        dao.cambioEstado(rol);
+    }
+
 }

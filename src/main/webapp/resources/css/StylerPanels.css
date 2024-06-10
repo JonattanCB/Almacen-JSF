@@ -15,7 +15,11 @@ url('https://fonts.googleapis.com/css2?family=Corporate+S+Plus+Volume&display=sw
 
 .buscador-table .titulo-tabla{
     font-weight: bold;
-    font-size: 24px;
+    font-size: 20px;
+}
+
+.titulo-card {
+    padding: 0px 10px;
 }
 
 .contenedor-card {
@@ -25,10 +29,44 @@ url('https://fonts.googleapis.com/css2?family=Corporate+S+Plus+Volume&display=sw
     user-select: none;
 }
 
+.columnas-texto-table{
+    text-align: center;
+    font-size: 15px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.customer-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    border-radius: 3px;
+
+}
+
+.ui-growl {
+    font-size: 10px;
+    width: 150px;
+}
+
+.ui-growl-title {
+    font-size: 13px;
+}
+
+.status-Activo {
+    background-color: #dff0d8; /* Light green background */
+    color: #3c763d; /* Dark green text */
+}
+
+.status-Inactivo {
+    background-color: #f2dede; /* Light red background */
+    color: #a94442; /* Dark red text */
+}
+
+
 .card {
     width: 95%;
     height: 140px;
-
 }
 
 .estructura-card {
@@ -39,6 +77,19 @@ url('https://fonts.googleapis.com/css2?family=Corporate+S+Plus+Volume&display=sw
 
 .icon {
     width: 70%;
+}
+
+.nuevo-button{
+    margin-right: .5rem;
+    width: 200px;
+}
+
+.nuevo-button .ui-button-success{
+    font-size: 12px;
+}
+
+.nuevo-button .ui-button-success .ui-icon{
+    font-size: 12px;
 }
 
 .esturctura-opciones {

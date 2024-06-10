@@ -61,6 +61,7 @@ public class BeansGestionUsuario implements Serializable {
     private int selectedRol;
     private int idSeleccionadaUsuario;
     private byte[] foto;
+    private boolean activarvistaUsuario;
     private String urlFoto;
     private Persona persona;
     private Usuario usuario;
@@ -73,7 +74,8 @@ public class BeansGestionUsuario implements Serializable {
         try{
             usuarioIngresado = new Usuario();
             lstTabla = servicioGestionUsuario.listaUsuario();
-            urlFoto = "/resources/imagenes/usuario/default.png"+"?ts=" + System.currentTimeMillis();;
+            urlFoto = "/resources/imagenes/usuario/default.png"+"?ts=" + System.currentTimeMillis();
+            activarvistaUsuario = false;
         }catch (Exception e){
             System.err.println(e.getMessage());
         }
@@ -95,6 +97,7 @@ public class BeansGestionUsuario implements Serializable {
 
     public String irUsuario() throws SQLException {
         lstTabla = servicioGestionUsuario.listaUsuario();
+        activarvistaUsuario = false;
         return "gestionpersonal/usuarios";
     }
 
@@ -111,6 +114,7 @@ public class BeansGestionUsuario implements Serializable {
         this.usuario = new Usuario();
         this.lstTipoDocumento = servicioTipoDocumento.listaTipoDocumento();
         this.lstRol = servicioGestionRol.listarRol();
+        activarvistaUsuario = false;
     }
 
     public void abrirUsuario() throws SQLException {
@@ -122,6 +126,18 @@ public class BeansGestionUsuario implements Serializable {
         this.selectedRol = usuario.getRol().getId();
         this.foto = usuario.getUrlfoto();
         descargaImagen(String.valueOf(usuario.getId()));
+        activarvistaUsuario =false;
+    }
+
+    public void abrirVistaUsuario(){
+        activarvistaUsuario = true;
+
+        System.out.println("abrir vista usuario:"+activarvistaUsuario);
+
+    }
+
+    public void CambiarEstado(){
+        System.out.println("cambia estado");
     }
 
     public void guardarUsuario() throws SQLException {
@@ -145,6 +161,8 @@ public class BeansGestionUsuario implements Serializable {
             servicioGestionUsuario.editarUsuario(usuario);
             eliminarArchivo(urlFoto);
         }
+        idSeleccionadaUsuario = 0;
+        activarvistaUsuario =false;
         urlFoto="";
         foto = null;
         lstTabla = servicioGestionUsuario.listaUsuario();

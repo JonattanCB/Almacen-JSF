@@ -8,7 +8,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Data;
 import org.TopAlmacen.Almacen.GestionTipoUnidad.model.TipoUnidad;
-import org.TopAlmacen.Almacen.GestionTipoUnidad.servicio.servicioGestionTipoUnidad;
+import org.TopAlmacen.Almacen.GestionTipoUnidad.servicio.ServicioGestionTipoUnidad;
 import org.primefaces.PrimeFaces;
 import org.primefaces.util.LangUtils;
 
@@ -23,7 +23,7 @@ import java.util.Locale;
 public class beansGestionTipoUnidad implements Serializable {
 
     @Inject
-    private servicioGestionTipoUnidad servicioGestionTipoUnidad;
+    private ServicioGestionTipoUnidad servicioGestionTipoUnidad;
 
     private List<TipoUnidad> lstTabla;
     private List<TipoUnidad> lstSeleccionado;

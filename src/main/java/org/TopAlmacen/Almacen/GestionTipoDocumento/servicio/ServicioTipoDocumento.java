@@ -14,11 +14,14 @@ import java.util.List;
 @LocalBean
 public class ServicioTipoDocumento implements Serializable {
 
-    private final daoGestionTipoDocumento dao =new ImplGestionTipoDocumento();
+    private final daoGestionTipoDocumento dao ;
+
+    public ServicioTipoDocumento() {
+        dao =new ImplGestionTipoDocumento();
+    }
 
     public List<TipoDocumento> listaTipoDocumento() throws SQLException {
-        List<TipoDocumento> lst = dao.buscarTodos();
-        return  lst;
+        return  dao.buscarTodos();
     }
 
     public void guardarTipoDocumento(TipoDocumento td) throws  SQLException {
@@ -32,4 +35,9 @@ public class ServicioTipoDocumento implements Serializable {
     public void ActualizarTipoDocumento(TipoDocumento td) throws  SQLException{
         dao.actualizar(td);
     }
+
+    public void CambiarEstado(TipoDocumento td) throws SQLException {
+        dao.CambiarEstado(td);
+    }
+
 }
