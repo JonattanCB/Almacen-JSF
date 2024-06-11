@@ -155,4 +155,51 @@ public class ImplGestionUsuario implements daoGestionUsuario {
             con.cerrar();
         }
     }
+
+    @Override
+    public boolean verificarUsuarioRepetido(Usuario usuario) throws SQLException {
+        try{
+            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT COUNT(*) as verificiar\n" +
+                    "\tFROM public.usuario where correo = ? ;");
+            ps.setString(1, usuario.getCorreo());
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                int verificiar = rs.getInt(1);
+                System.out.println( verificiar > 1 );
+                return verificiar > 1;
+            }
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
+        return false;
+    }
+
+    @Override
+    public Usuario traerLoginUsuario(Usuario usuario) throws SQLException {
+        Usuario u  = new Usuario();
+        try{
+            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, correo, contrasenia, rol_id, persona_id, estado, \"Cfecha\", foto\n" +
+                    "\tFROM public.usuario where correo = ? and contrasenia =?;");
+            ps.setString(1, usuario.getCorreo());
+            ps.setString(2, usuario.getContrasenia());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                u.setId(rs.getInt(1));
+                u.setCorreo(rs.getString(2));
+                u.setContrasenia(rs.getString(3));
+                u.setRol(daorol.buscar(rs.getInt(4)));
+                u.setPersonas(daopersonal.buscar(rs.getInt(5)));
+                u.setEstado(rs.getString(6));
+                u.setCfecha(rs.getTimestamp(7));
+                u.setUrlfoto(rs.getBytes(8));
+            }
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
+        return u;
+    }
 }

@@ -65,7 +65,9 @@ public class BeansGestionUsuario implements Serializable {
     private boolean activarvistaUsuario;
     private boolean activarUsuarioDatos;
     private boolean activeNewButton;
+    private boolean activePassword;
     private String urlFoto;
+    private String correoAntiguoUsuario;
     private Persona persona;
     private Usuario usuario;
     private Usuario usuarioIngresado;
@@ -80,6 +82,7 @@ public class BeansGestionUsuario implements Serializable {
             urlFoto = "/resources/imagenes/usuario/default.png"+"?ts=" + System.currentTimeMillis();
             activarvistaUsuario = true;
             activarUsuarioDatos=false;
+            activePassword = true;
             verificarusoNuevoUsuario();
         }catch (Exception e){
             System.err.println(e.getMessage());
@@ -93,9 +96,20 @@ public class BeansGestionUsuario implements Serializable {
         String contraMD5 = MD5(usuarioIngresado.getContrasenia());
         usuarioIngresado.setContrasenia(contraMD5);
         if (servicioGestionUsuario.VerificiarUsuario(usuarioIngresado)){
-            return "gestion/dasboard";
+            Usuario user = new Usuario();
+            user.setCorreo(usuarioIngresado.getCorreo());
+            user.setContrasenia(usuarioIngresado.getContrasenia());
+            usuarioIngresado = servicioGestionUsuario.traerLoginUsuario(user);
+            if (usuarioIngresado.getEstado().equals("Activo")){
+                return "gestion/dasboard";
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage( FacesMessage.SEVERITY_ERROR,"El usuario está desactivado. Por favor, contacte al administrador para más información.",null));
+                return "index";
+            }
         }else {
             usuarioIngresado = new Usuario();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage( FacesMessage.SEVERITY_ERROR,"Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo.",null));
+            PrimeFaces.current().ajax().update("form:messages");
             return "index";
         }
     }
@@ -104,6 +118,7 @@ public class BeansGestionUsuario implements Serializable {
         lstTabla = servicioGestionUsuario.listaUsuario();
         activarvistaUsuario = true;
         activarUsuarioDatos=false;
+        activePassword = true;
         verificarusoNuevoUsuario();
         return "gestionpersonal/usuarios";
     }
@@ -123,10 +138,12 @@ public class BeansGestionUsuario implements Serializable {
         this.lstRol = servicioGestionRol.listRolActivo();
         activarvistaUsuario = true;
         activarUsuarioDatos=false;
+        activePassword = true;
         verificarusoNuevoUsuario();
     }
 
     public void abrirUsuario() throws SQLException {
+        activePassword = false;
         this.usuario = servicioGestionUsuario.buscarUsuario(idSeleccionadaUsuario);
         this.lstTipoDocumento = listTipoDocumentoActualizado(usuario);
         this.lstRol = listRolActualizado(usuario);
@@ -134,6 +151,7 @@ public class BeansGestionUsuario implements Serializable {
         this.selectedTipoDocumento = persona.getTipoDocumento().getId();
         this.selectedRol = usuario.getRol().getId();
         this.foto = usuario.getUrlfoto();
+        this.correoAntiguoUsuario = usuario.getCorreo();
         descargaImagen(String.valueOf(usuario.getId()));
         activarvistaUsuario =true;
         activarUsuarioDatos= false;
@@ -141,6 +159,7 @@ public class BeansGestionUsuario implements Serializable {
     }
 
     public void abrirVistaUsuario() throws SQLException {
+        activePassword = false;
         activarvistaUsuario = false;
         activarUsuarioDatos = true;
         this.usuario = servicioGestionUsuario.buscarUsuario(idSeleccionadaUsuario);
@@ -168,38 +187,61 @@ public class BeansGestionUsuario implements Serializable {
     }
 
     public void guardarUsuario() throws SQLException {
-        if (usuario.getId() == 0){
-            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-            persona.setTipoDocumento(servicioTipoDocumento.buscarTipoDocumento(selectedTipoDocumento));
-            persona.setId(servicioPersona.registrarRetornadoID(persona));
-            usuario.setPersonas(persona);
-            usuario.setRol(servicioGestionRol.buscarRol(selectedRol));
-            usuario.setContrasenia(MD5(usuario.getContrasenia()));
-            usuario.setEstado("Activo");
-            usuario.setCfecha(timestamp);
-            usuario.setUrlfoto(foto);
-            servicioGestionUsuario.registrarUsuario(usuario);
-            eliminarArchivo(urlFoto);
-            String nombreCompleto = usuario.getPersonas().getPnombre() +" "+usuario.getPersonas().getSnombre() +" "+usuario.getPersonas().getApatero() +" "+usuario.getPersonas().getAmatero();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El usuario "+nombreCompleto+" ha sido registrado exitosamente en el sistema!"));
-        }else{
-            persona.setTipoDocumento(servicioTipoDocumento.buscarTipoDocumento(selectedTipoDocumento));
-            servicioPersona.editarPersona(persona);
-            usuario.setRol(servicioGestionRol.buscarRol(selectedRol));
-            usuario.setUrlfoto(foto);
-            servicioGestionUsuario.editarUsuario(usuario);
-            eliminarArchivo(urlFoto);
-            String nombreCompleto = usuario.getPersonas().getPnombre() +" "+usuario.getPersonas().getSnombre() +" "+usuario.getPersonas().getApatero() +" "+usuario.getPersonas().getAmatero();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El usuario "+nombreCompleto+" ha sido actualizado exitosamente en el sistema!"));
-        }
+       if(usuario.getId() == 0){
+           if (servicioGestionUsuario.verificarUsuarioRepetido(usuario)){
+               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage( FacesMessage.SEVERITY_WARN,"El correo ya está registrado para otro usuario.",null));
+           }else{
+               Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+               persona.setTipoDocumento(servicioTipoDocumento.buscarTipoDocumento(selectedTipoDocumento));
+               persona.setId(servicioPersona.registrarRetornadoID(persona));
+               usuario.setPersonas(persona);
+               usuario.setRol(servicioGestionRol.buscarRol(selectedRol));
+               usuario.setContrasenia(MD5(usuario.getContrasenia()));
+               usuario.setEstado("Activo");
+               usuario.setCfecha(timestamp);
+               usuario.setUrlfoto(foto);
+               servicioGestionUsuario.registrarUsuario(usuario);
+               eliminarArchivo(urlFoto);
+               String nombreCompleto = usuario.getPersonas().getPnombre() + " " + usuario.getPersonas().getSnombre() + " " + usuario.getPersonas().getApatero() + " " + usuario.getPersonas().getAmatero();
+               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El usuario " + nombreCompleto + " ha sido registrado exitosamente en el sistema!"));
+               PrimeFaces.current().executeScript("PF('userdialog').hide()");
+           }
+       }
+
+       if(usuario.getId() !=0){
+           if (usuario.getCorreo().equals(correoAntiguoUsuario)){
+               persona.setTipoDocumento(servicioTipoDocumento.buscarTipoDocumento(selectedTipoDocumento));
+               servicioPersona.editarPersona(persona);
+               usuario.setRol(servicioGestionRol.buscarRol(selectedRol));
+               usuario.setUrlfoto(foto);
+               servicioGestionUsuario.editarUsuario(usuario);
+               eliminarArchivo(urlFoto);
+               String nombreCompleto = usuario.getPersonas().getPnombre() + " " + usuario.getPersonas().getSnombre() + " " + usuario.getPersonas().getApatero() + " " + usuario.getPersonas().getAmatero();
+               FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El usuario " + nombreCompleto + " ha sido actualizado exitosamente en el sistema!"));
+               PrimeFaces.current().executeScript("PF('userdialog').hide()");
+           }else {
+               if (servicioGestionUsuario.verificarUsuarioRepetido(usuario)){
+                   FacesContext.getCurrentInstance().addMessage(null, new FacesMessage( FacesMessage.SEVERITY_WARN,"El correo ya está registrado para otro usuario.",null));
+               }else{
+                   persona.setTipoDocumento(servicioTipoDocumento.buscarTipoDocumento(selectedTipoDocumento));
+                   servicioPersona.editarPersona(persona);
+                   usuario.setRol(servicioGestionRol.buscarRol(selectedRol));
+                   usuario.setUrlfoto(foto);
+                   servicioGestionUsuario.editarUsuario(usuario);
+                   eliminarArchivo(urlFoto);
+                   String nombreCompleto = usuario.getPersonas().getPnombre() + " " + usuario.getPersonas().getSnombre() + " " + usuario.getPersonas().getApatero() + " " + usuario.getPersonas().getAmatero();
+                   FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El usuario " + nombreCompleto + " ha sido actualizado exitosamente en el sistema!"));
+                   PrimeFaces.current().executeScript("PF('userdialog').hide()");
+               }
+           }
+       }
         idSeleccionadaUsuario = 0;
-        activarvistaUsuario =true;
-        activarUsuarioDatos=false;
-        urlFoto="";
+        usuario = new Usuario();
+        urlFoto = "";
+        correoAntiguoUsuario = "";
         foto = null;
         lstTabla = servicioGestionUsuario.listaUsuario();
         verificarusoNuevoUsuario();
-        PrimeFaces.current().executeScript("PF('userdialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt-user");
     }
 
@@ -227,9 +269,15 @@ public class BeansGestionUsuario implements Serializable {
                 + File.separator + "usuario" +File.separator+ fileName;
         File file = new File(urlPatch);
         file.getParentFile().mkdirs();
+
+        if (foto == null) {
+            urlFoto = "/resources/imagenes/usuario/default.png"+"?ts=" + System.currentTimeMillis();
+            return;
+        }
+
         try (FileOutputStream fos = new FileOutputStream(file)) {
-            fos.write(foto);
-            urlFoto = "/resources/imagenes/usuario/" + fileName+"?ts=" + System.currentTimeMillis();
+                fos.write(foto);
+                urlFoto = "/resources/imagenes/usuario/" + fileName+"?ts=" + System.currentTimeMillis();
         } catch (IOException e) {
             System.out.println("Error al guardar el archivo: " + e.getMessage());
         }

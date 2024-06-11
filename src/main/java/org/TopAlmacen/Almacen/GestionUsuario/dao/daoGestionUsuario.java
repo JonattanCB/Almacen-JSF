@@ -10,4 +10,9 @@ public interface daoGestionUsuario extends Crud<Usuario> {
     boolean verificadorUsuario(Usuario usuario) throws SQLException;
 
     void  cambiarEstado(Usuario usuario) throws  SQLException;
+
+    boolean verificarUsuarioRepetido(Usuario usuario) throws SQLException;
+
+    Usuario traerLoginUsuario(Usuario usuario) throws  SQLException;
+
 }

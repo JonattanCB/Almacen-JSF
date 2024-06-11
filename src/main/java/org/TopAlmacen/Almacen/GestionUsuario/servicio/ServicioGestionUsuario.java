@@ -45,4 +45,12 @@ public class ServicioGestionUsuario implements Serializable {
         dao.cambiarEstado(u);
     }
 
+    public boolean verificarUsuarioRepetido(Usuario u) throws SQLException {
+        return  dao.verificarUsuarioRepetido(u);
+    }
+
+    public Usuario traerLoginUsuario(Usuario u) throws SQLException {
+        return  dao.traerLoginUsuario(u);
+    }
+
 }

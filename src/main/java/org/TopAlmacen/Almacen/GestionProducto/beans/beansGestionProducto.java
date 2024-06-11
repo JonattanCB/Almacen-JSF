@@ -2,6 +2,7 @@ package org.TopAlmacen.Almacen.GestionProducto.beans;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
@@ -66,6 +67,9 @@ public class beansGestionProducto implements Serializable {
     private int idSeleccionCategoria;
     private int idSeleccionTunidad;
     private int idSeleccionProveedor;
+    private boolean VerificarNewProducto;
+    private boolean verificarVistaData;
+    private boolean verificarInputData;
     private String urlFoto;
     private byte[] foto;
 
@@ -75,7 +79,10 @@ public class beansGestionProducto implements Serializable {
     public void init(){
         try{
             productoList = servicioGestionProducto.listProductos();
-            urlFoto = "/resources/imagenes/producto/default.png"+"?ts=" + System.currentTimeMillis();;
+            urlFoto = "/resources/imagenes/producto/default.png"+"?ts=" + System.currentTimeMillis();
+            verificiarNuevoProducto();
+            verificarInputData = true;
+            verificarVistaData= false;
         }catch (SQLException e){
             System.err.println(e.getMessage());
         }
@@ -86,6 +93,9 @@ public class beansGestionProducto implements Serializable {
 
     public String irProducto() throws SQLException {
         productoList = servicioGestionProducto.listProductos();
+        verificarInputData = true;
+        verificarVistaData= false;
+        verificiarNuevoProducto();
         return "gestionProducto/Producto";
     }
 
@@ -104,14 +114,18 @@ public class beansGestionProducto implements Serializable {
     }
 
     public void irNuevoProducto() throws SQLException {
-        urlFoto = "/resources/imagenes/producto/default.png"+"?ts=" + System.currentTimeMillis();;
+        urlFoto = "/resources/imagenes/producto/default.png"+"?ts=" + System.currentTimeMillis();
+        foto = null;
         producto = new Producto();
-        unidadList = servicioGestionTipoUnidad.lstTipoUnidad();
-        categoriaList = servicioGestionCategoria.lstCategoria();
-        proveedorList= servicioGestionProveedor.proveedorList();
+        unidadList = servicioGestionTipoUnidad.listTipoUnidadActivo();
+        categoriaList = servicioGestionCategoria.listCategoriaActivo();
+        proveedorList= servicioGestionProveedor.lstProveedorActivo();
         idSeleccionCategoria=0;
         idSeleccionTunidad=0;
         idSeleccionProveedor=0;
+        verificarInputData = true;
+        verificarVistaData= false;
+        verificiarNuevoProducto();
     }
 
     public void irActualizarProducto() throws SQLException {
@@ -124,6 +138,9 @@ public class beansGestionProducto implements Serializable {
         idSeleccionProveedor=producto.getProveedor().getIdProveedor();
         foto = producto.getFoto();
         descargaImagen(String.valueOf(producto.getIdProducto()));
+        verificarInputData = true;
+        verificarVistaData= false;
+        verificiarNuevoProducto();
     }
 
     public void seleccionarFoto(FileUploadEvent event){
@@ -136,7 +153,7 @@ public class beansGestionProducto implements Serializable {
             producto.setProveedor(servicioGestionProveedor.proveedor(idSeleccionProveedor));
             producto.setCategoria(servicioGestionCategoria.buscarCategoria(idSeleccionCategoria));
             producto.setTipoUnidad(servicioGestionTipoUnidad.buscar(idSeleccionTunidad));
-            producto.setEstado("1");
+            producto.setEstado("Activo");
             producto.setCfecha(timestamp);
             producto.setFoto(foto);
             producto.setIdProducto(servicioGestionProducto.registraProductoRetornaID(producto));
@@ -149,14 +166,43 @@ public class beansGestionProducto implements Serializable {
             servicioGestionProducto.ActualizarProducto(producto);
             eliminarArchivo(urlFoto);
         }
+        idProducto = 0 ;
+        urlFoto="";
+        foto = null;
         productoList = servicioGestionProducto.listProductos();
+        verificiarNuevoProducto();
         PrimeFaces.current().executeScript("PF('dialog').hide()");
         PrimeFaces.current().ajax().update("form:messages", "form:dt");
     }
 
+    public void CambiarEstado() throws SQLException {
+        producto = servicioGestionProducto.traerProducto(idProducto);
+        switch (producto.getEstado()){
+            case "Activo":
+                producto.setEstado("Inactivo");
+                break;
+            case "Inactivo":
+                producto.setEstado("Activo");
+                break;
+        }
+        servicioGestionProducto.CambioEstado(producto);
+        productoList = servicioGestionProducto.listProductos();
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡El estado del producto ha cambiado a "+producto.getEstado()+"!"));
+        PrimeFaces.current().executeScript("PF('dialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt");
+    }
+
+    public void irDatoProducto() throws SQLException {
+        verificarInputData = false;
+        verificarVistaData= true;
+        producto = servicioGestionProducto.traerProducto(idProducto);
+        foto = producto.getFoto();
+        descargaImagen(String.valueOf(producto.getIdProducto()));
+    }
+
+
     /*  =========================== Extensiones  ========================= */
     /*  ================================================================== */
-
     private int getInteger(String string) {
         try {
             return Integer.parseInt(string);
@@ -173,10 +219,15 @@ public class beansGestionProducto implements Serializable {
                 + File.separator + "producto" +File.separator+ fileName;
         File file = new File(urlPatch);
         file.getParentFile().mkdirs();
+
+        if (foto == null) {
+            urlFoto = "/resources/imagenes/producto/default.png"+"?ts=" + System.currentTimeMillis();
+            return;
+        }
+
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(foto);
             urlFoto = "/resources/imagenes/producto/" + fileName+"?ts=" + System.currentTimeMillis();
-            System.out.println("datos ver: "+urlFoto);
         } catch (IOException e) {
             System.out.println("Error al guardar el archivo: " + e.getMessage());
         }
@@ -223,6 +274,17 @@ public class beansGestionProducto implements Serializable {
             }
         } else {
             return false;
+        }
+    }
+
+    private void verificiarNuevoProducto() throws SQLException {
+        List<TipoUnidad> unidad = servicioGestionTipoUnidad.listTipoUnidadActivo();
+        List<Categoria> categoria = servicioGestionCategoria.listCategoriaActivo();
+        List<Proveedor> proveedor = servicioGestionProveedor.proveedorList();
+        if (unidad == null || unidad.isEmpty() || categoria == null || categoria.isEmpty() || proveedor == null || proveedor.isEmpty()){
+            VerificarNewProducto = true;
+        }else {
+            VerificarNewProducto = false;
         }
     }
 

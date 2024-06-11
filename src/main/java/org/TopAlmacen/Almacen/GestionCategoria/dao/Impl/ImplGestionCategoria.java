@@ -13,7 +13,11 @@ import java.util.List;
 
 public class ImplGestionCategoria implements daoGestionCategoria {
 
-    private final conexion con = new conexion();
+    private final conexion con;
+
+    public ImplGestionCategoria() {
+        con = new conexion();
+    }
 
     @Override
     public void registrar(Categoria categoria) throws SQLException {
@@ -117,5 +121,29 @@ public class ImplGestionCategoria implements daoGestionCategoria {
         }finally {
             con.cerrar();
         }
+    }
+
+    @Override
+    public List<Categoria> listarActivo() throws SQLException {
+        List<Categoria> categorias = new ArrayList<>();
+        try {
+            PreparedStatement ps = con.crearCNX().prepareStatement("SELECT id, nombre, descripcion, estado, cfecha\n" +
+                    "\tFROM public.\"Categoria\" where estado = 'Activo';");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                Categoria c = new Categoria();
+                c.setId(rs.getInt(1));
+                c.setNombre(rs.getString(2));
+                c.setDescripcion(rs.getString(3));
+                c.setEstado(rs.getString(4));
+                c.setCFecha(rs.getTimestamp(5));
+                categorias.add(c);
+            }
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
+        return categorias;
     }
 }

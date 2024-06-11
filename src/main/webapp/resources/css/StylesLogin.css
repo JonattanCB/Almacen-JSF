@@ -10,6 +10,15 @@
     background-color: rgb(30, 37, 46);
 }
 
+.ui-growl {
+    font-size: 10px;
+    width: 150px;
+}
+
+.ui-growl-title {
+    font-size: 13px;
+}
+
 .container-form {
     background:
             url("https://d29jy8ovkd5kcx.cloudfront.net/wp-content/uploads/2021/12/20142135/Software-de-gestion-de-almacenes.jpg")

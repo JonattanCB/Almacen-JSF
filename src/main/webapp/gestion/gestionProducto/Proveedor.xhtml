@@ -67,7 +67,7 @@
                     </p:commandButton> |
                     <p:commandButton icon="pi pi-pencil" update=":dialogs"
                                      oncomplete="PF('dialog').show()" action="#{beansGestionProveedor.Abrirproveedor()}"
-                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                                     styleClass="edit-button rounded-button ui-button-warning" process="@this">
                         <f:setPropertyActionListener value="#{proveedor.idProveedor}" target="#{beansGestionProveedor.idProveedor}" />
                     </p:commandButton> |
                     <p:commandButton class="edit-button ui-button-secondary rounded-button"

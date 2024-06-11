@@ -39,4 +39,7 @@ public class ServicioGestionCategoria  implements Serializable {
         dao.CambiarEstado(c);
     }
 
+    public List<Categoria> listCategoriaActivo() throws  SQLException{
+        return dao.listarActivo();
+    }
 }

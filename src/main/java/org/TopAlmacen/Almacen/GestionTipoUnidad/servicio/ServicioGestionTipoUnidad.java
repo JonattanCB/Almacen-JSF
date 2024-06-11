@@ -40,4 +40,8 @@ public class ServicioGestionTipoUnidad implements Serializable {
         dao.cambiarestado(tipoUnidad);
     }
 
+    public List<TipoUnidad> listTipoUnidadActivo() throws SQLException {
+        return dao.listarActivo();
+    }
+
 }

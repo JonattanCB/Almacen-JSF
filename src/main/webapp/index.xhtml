@@ -11,7 +11,8 @@
 	<h:outputStylesheet  library="css" name="StylesLogin.css"  />
 </h:head>
 <h:body styleClass="color-fondo">
-	<h:form id="myform">
+	<h:form id="form">
+		<p:growl id="messages" />
 		<div class="container-form">
 			<div class="form">
 				<h:panelGrid styleClass="container-logo">
@@ -25,12 +26,11 @@
 						</p>
 					</h:panelGrid>
 					<h:panelGrid styleClass="container-inputs">
-						<p:growl id="growl" showDetail="true" sticky="true" />
 						<p:inputText value="#{beansGestionUsuario.usuarioIngresado.correo}" placeholder="Correo" styleClass="correo" />
 						<p:password value="#{beansGestionUsuario.usuarioIngresado.contrasenia}" toggleMask="true" redisplay="true"
 							placeholder="Contraseña" styleClass="correo" />
 						<p:commandButton value="Iniciar Sesion"  styleClass="button"  action="#{beansGestionUsuario.login()}"
-							update="myform" />
+							update="form" />
 					</h:panelGrid>
 				</h:panelGrid>
 			</div>

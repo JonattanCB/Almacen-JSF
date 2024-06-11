@@ -159,4 +159,48 @@ public class ImplGestionProducto implements daoGestionProducto {
         }
         return nuevoid;
     }
+
+    @Override
+    public void CambioEstado(Producto producto) throws SQLException {
+        try {
+            PreparedStatement ps =con.crearCNX().prepareStatement("UPDATE public.productos\n" +
+                    "\tSET estado = ? \n" +
+                    "\tWHERE id = ?;");
+            ps.setString(1, producto.getEstado());
+            ps.setInt(2, producto.getIdProducto());
+            ps.execute();
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
+    }
+
+    @Override
+    public List<Producto> listProductoActivo() throws SQLException {
+        List<Producto> list = new ArrayList<>();
+        try {
+            PreparedStatement ps =con.crearCNX().prepareStatement("SELECT id, nombre, descripcion, foto, categoria, tipounidad, proveedor, estado, \"Cfecha\"\n" +
+                    "\tFROM public.productos where estado='Activo';");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                Producto p = new Producto();
+                p.setIdProducto(rs.getInt(1));
+                p.setNombre(rs.getString(2));
+                p.setDescripcion(rs.getString(3));
+                p.setFoto(rs.getBytes(4));
+                p.setCategoria(daocate.buscar(rs.getInt(5)));
+                p.setTipoUnidad(daotu.buscar(rs.getInt(6)));
+                p.setProveedor(daopro.buscar(rs.getInt(7)));
+                p.setEstado(rs.getString(8));
+                p.setCfecha(rs.getTimestamp(9));
+                list.add(p);
+            }
+        }catch (SQLException e){
+            System.err.println(e.getMessage());
+        }finally {
+            con.cerrar();
+        }
+        return list;
+    }
 }

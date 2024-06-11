@@ -40,4 +40,12 @@ public class ServicioGestionProducto implements Serializable {
         return  dao.registraProductoRetornaID(producto);
     }
 
+    public void CambioEstado(Producto producto) throws SQLException {
+        dao.CambioEstado(producto);
+    }
+
+    public List<Producto> listProductoActivo() throws  SQLException {
+        return  dao.listProductoActivo();
+    }
+
 }
