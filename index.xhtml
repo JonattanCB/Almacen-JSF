@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><h:outputText value="Login" /></title>
+	<h:outputStylesheet  library="primefaces-saga" name="theme.css"  />
+	<h:outputStylesheet  library="css" name="StylesLogin.css"  />
+</h:head>
+<h:body styleClass="color-fondo">
+	<h:form id="myform">
+		<div class="container-form">
+			<div class="form">
+				<h:panelGrid styleClass="container-logo">
+					<p:graphicImage styleClass="logo"
+						url="https://www.zarla.com/images/zarla-top-almacn-1x1-2400x2400-20220204-fbm4jgvkfpqm7pcvqqfv.png" />
+				</h:panelGrid>
+				<h:panelGrid styleClass="container-items">
+					<h:panelGrid styleClass="container-bienvenido">
+						<p>
+							<h:outputText value="¡Bienvenido de nuevo!" styleClass="bienvenido" />
+						</p>
+					</h:panelGrid>
+					<h:panelGrid styleClass="container-inputs">
+						<p:growl id="growl" showDetail="true" sticky="true" />
+						<p:inputText placeholder="Correo" styleClass="correo" />
+						<p:password toggleMask="true" redisplay="true"
+							placeholder="Contraseña" styleClass="correo" />
+						<p:commandButton value="Iniciar Sesion"  styleClass="button"  action="gestion/dasboard"
+							update="myform" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</div>
+		</div>
+	</h:form>
+</h:body>
+</html>

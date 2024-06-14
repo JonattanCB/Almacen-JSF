@@ -1,0 +1,19 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/WEB-INF/lib/jakarta.activation-api-2.1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WEB-INF/lib/jakarta.persistence-api-3.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WEB-INF/lib/jakarta.xml.bind-api-4.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WEB-INF/lib/postgresql-42.6.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WEB-INF/lib/eclipselink-4.0.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WEB-INF/lib/angus-activation-2.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WEB-INF/lib/omnifaces-4.4.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WEB-INF/lib/checker-qual-3.31.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WEB-INF/lib/jaxb-xjc-4.0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WEB-INF/lib/jaxb-core-4.0.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/WEB-INF/lib/primefaces-12.0.0-jakarta.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

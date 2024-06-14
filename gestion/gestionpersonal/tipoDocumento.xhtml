@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Tipo Documento</title>
+    <h:outputStylesheet  library="primefaces-saga" name="theme.css" />
+    <h:outputStylesheet library="css" name="SylerTodo.css"/>
+    <h:outputStylesheet library="css" name="StylerPanels.css"/>
+</h:head>
+<h:body styleClass="contendor-panel" >
+    <h:form  id="form">
+        <p:growl id="messages" showDetail="true" />
+        <p:panel styleClass="card-informacion">
+            <f:facet name="header">
+                <i class="pi pi-sitemap"/> <p:outputLabel value="Listado de Tipo de Documentacion" styleClass="titulo-card" />
+            </f:facet>
+            <p:toolbar>
+                <p:toolbarGroup >
+                    <p:commandButton value="Nuevo Tipo de documento" icon="pi pi-plus" actionListener="#{beansGestionTipoDocumento.abrirNuevoTipoDocumento()}"
+                                     update=":dialogs:dtdialog-content" oncomplete="PF('tddialog').show()"
+                                     styleClass="ui-button-success" style="margin-right: .5rem">
+                        <p:resetInput target=":dialogs:dtdialog-content" />
+                    </p:commandButton>
+                </p:toolbarGroup>
+
+            </p:toolbar>
+            <p:dataTable id="dt-td" var="td" value="#{beansGestionTipoDocumento.list_tdocumento}"  widgetVar="td"
+                         emptyMessage="No hay tipo de documentos Registrados"
+                         filteredValue="#{beansGestionTipoDocumento.list_tdocumentoSeleccionado}"
+                         globalFilterFunction="#{beansGestionTipoDocumento.globalFilterFunction}"
+                         rows="10" paginator="true" rowSelectMode="add" paginatorPosition="bottom">
+
+                <f:facet name="header">
+                    <div class="buscador-table">
+                        <span class="titulo-tabla">TIPOS DE DOCUMENTOS</span>
+                        <span class="filter-container ui-input-icon-left" style="float: right">
+                            <i class="pi pi-search"/>
+                            <p:inputText id="globalFilter" onkeyup="PF('td').filter()"
+                                         placeholder="Buscar todo los campos" />
+                        </span>
+                    </div>
+                </f:facet>
+
+                <p:column headerText="#"  >
+                    <h:outputText value="#{td.id}" />
+                </p:column>
+                <p:column headerText="Nombre" >
+                    <h:outputText value="#{td.nombre}" />
+                </p:column>
+                <p:column headerText="Descripcion" >
+                    <h:outputText value="#{td.descripcion}" />
+                </p:column>
+                <p:column headerText="Acciones">
+                    <p:commandButton icon="pi pi-pencil" update=":dialogs:dtdialog-content"
+                                     oncomplete="PF('tddialog').show()" action="#{beansGestionTipoDocumento.abrirtipoDocumento()}"
+                                     styleClass="edit-button rounded-button ui-button-success" process="@this">
+                        <f:setPropertyActionListener value="#{td.id}" target="#{beansGestionTipoDocumento.ID_TipoDocumento}" />
+                    </p:commandButton> |
+                    <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+                                     process="@this"
+                                     oncomplete="PF('delete-td').show()" >
+                        <f:setPropertyActionListener value="#{td.id}" target="#{beansGestionTipoDocumento.ID_TipoDocumento}" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </p:panel>
+    </h:form>
+
+    <h:form id="dialogs">
+        <p:dialog header="Detalles de Tipo de Documento" showEffect="fade" modal="true" widgetVar="tddialog" width="500" responsive="true">
+            <p:outputPanel id="dtdialog-content" styleClass="ui-fluid" >
+                <div class="field">
+                    <p:outputLabel  for="nombre"  value="Nombre" />
+                    <br/>
+                    <p:inputText id="nombre" value="#{beansGestionTipoDocumento.tipoDocumento.nombre}"  required="true"/>
+                </div><br/>
+                <div class="field">
+                    <p:outputLabel for="descripcion" value="Descripcion" />
+                    <br/><p:inputTextarea id="descripcion" value="#{beansGestionTipoDocumento.tipoDocumento.descripcion}" required="true" />
+                </div>
+            </p:outputPanel>
+            <f:facet name="footer">
+                <p:commandButton value="Guardar"  icon="pi pi-check" action="#{beansGestionTipoDocumento.guardarTipoDocumento()}" update="dtdialog-content" process="dtdialog-content @this" />
+                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('tddialog').hide()"  styleClass="ui-button-secondary" type="button"/>
+            </f:facet>
+        </p:dialog>
+        <p:confirmDialog widgetVar="delete-td" showEffect="fade" width="300" message="Deseas dar de baja este Tipo de documento?" header="Confirmacion"
+                         severity="warn">
+            <p:commandButton value="Yes" icon="pi pi-check"
+                             process="@this" update=":form"
+                             oncomplete="PF('delete-td').hide()" />
+            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                             onclick="PF('delete-td').hide()" />
+        </p:confirmDialog>
+    </h:form>
+</h:body>
+</html>

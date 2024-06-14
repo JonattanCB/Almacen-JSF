@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+	<title>panels</title>
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+	<h:outputStylesheet library="primefaces-saga" name="theme.css"  />
+	<h:outputStylesheet  library="css" name="StylerPanels.css"  />
+</h:head>
+<h:body styleClass="contendor">
+	<h:form>
+		<div class="contenedor-card">
+			<h:panelGrid columns="4">
+				<p:card styleClass="card" style="background:#0077ff">
+					<h:panelGrid columns="2" styleClass="estructura-card">
+						<h:panelGrid>
+							<h:graphicImage
+								url="https://cdn-icons-png.flaticon.com/256/10982/10982466.png"
+								styleClass="icon" />
+						</h:panelGrid>
+						<h:panelGrid>
+							<h:panelGrid styleClass="esturctura-opciones">
+								<div>
+									<h:outputLabel value="39" styleClass="texto-numero-opciones" />
+								</div>
+								<div>
+									<h:outputLabel value="Producto"
+										styleClass="texto-letra-opciones" />
+								</div>
+							</h:panelGrid>
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:card>
+				<p:card styleClass="card" style="background:#754dc5;">
+					<h:panelGrid columns="2" styleClass="estructura-card">
+						<h:panelGrid>
+							<h:graphicImage
+								url="https://cdn-icons-png.flaticon.com/256/1486/1486213.png"
+								styleClass="icon" />
+						</h:panelGrid>
+						<h:panelGrid>
+							<h:panelGrid styleClass="esturctura-opciones">
+								<div>
+									<h:outputLabel value="39" styleClass="texto-numero-opciones" />
+								</div>
+								<div>
+									<h:outputLabel value="Orden de Compra"
+										styleClass="texto-letra-opciones" />
+								</div>
+							</h:panelGrid>
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:card>
+				<p:card styleClass="card" style="background:#ff5e00;">
+					<h:panelGrid columns="2" styleClass="estructura-card">
+						<h:panelGrid>
+							<h:graphicImage
+								url="https://cdn-icons-png.flaticon.com/256/4047/4047598.png"
+								styleClass="icon" />
+						</h:panelGrid>
+						<h:panelGrid>
+							<h:panelGrid styleClass="esturctura-opciones">
+								<div>
+									<h:outputLabel value="39" styleClass="texto-numero-opciones" />
+								</div>
+								<div>
+									<h:outputLabel value="Salida de Producto"
+										styleClass="texto-letra-opciones" />
+								</div>
+							</h:panelGrid>
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:card>
+				<p:card styleClass="card" style="background:#e93261;">
+					<h:panelGrid columns="2" styleClass="estructura-card">
+						<h:panelGrid>
+							<h:graphicImage
+								url="https://cdn-icons-png.flaticon.com/256/4490/4490381.png"
+								styleClass="icon" />
+						</h:panelGrid>
+						<h:panelGrid>
+							<h:panelGrid styleClass="esturctura-opciones">
+								<div>
+									<h:outputLabel value="39" styleClass="texto-numero-opciones" />
+								</div>
+								<div>
+									<h:outputLabel value="Personal"
+										styleClass="texto-letra-opciones" />
+								</div>
+							</h:panelGrid>
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:card>
+
+			</h:panelGrid>
+		</div>
+		<div class="contenedor-informacion">
+			<h:panelGrid columns="3"
+				styleClass="contenedor-informacion-panel">
+				<p:panel styleClass="contenedor-informacion-tabla">
+					<f:facet name="header">
+						<i class="pi pi-microsoft"></i>  Productos Mas Consumidos
+					</f:facet>
+					<h:panelGrid>
+						<p:dataTable styleClass="cotenedor-tabla-informacion-datos">
+							<p:column headerText="Nombre">
+								<h:outputText value="ea" />
+							</p:column>
+							<p:column headerText="N° Salida">
+								<h:outputText value="pe"/>
+							</p:column>
+							<p:column headerText="Cantidad">
+								<h:outputText value="ee" />
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</p:panel>
+				<p:panel styleClass="contenedor-informacion-tabla">
+					<f:facet name="header">
+						<i class="pi pi-microsoft"></i>   Ultimas Salidas 
+					</f:facet>
+					<h:panelGrid>
+						<p:dataTable styleClass="cotenedor-tabla-informacion-datos">
+							<p:column headerText="Codigo">
+								<h:outputText value="Fecha" />
+							</p:column>
+							<p:column headerText="Fecha">
+								<h:outputText value="wa"/>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</p:panel>
+				<p:panel styleClass="contenedor-informacion-tabla">
+					<f:facet name="header">
+						<i class="pi pi-microsoft"></i>  Ultima Entrada
+					</f:facet>
+					<h:panelGrid>
+						<p:dataTable styleClass="cotenedor-tabla-informacion-datos">
+							<p:column headerText="Codigo">
+								<h:outputText value="ea" />
+							</p:column>
+							<p:column headerText="Fecha">
+								<h:outputText value="pe"/>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</p:panel>
+			</h:panelGrid>
+		</div>
+	</h:form>
+</h:body>
+</html>
